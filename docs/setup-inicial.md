@@ -4,7 +4,7 @@ Esta guía es **para ti**, quien instala y configura el agente en el computador 
 
 Cada cuenta que creas acá queda a nombre del administrador (usa su correo o datos) y él paga directamente los servicios.
 
-> **Sistema operativo:** todas las instalaciones corren sobre **Ubuntu**.
+> **Sistema operativo:** todas las instalaciones corren sobre **Ubuntu**. Git viene instalado por defecto.
 
 ---
 

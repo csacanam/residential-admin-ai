@@ -53,10 +53,7 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 ### Instalación en el computador del cliente
 
 ```bash
-# 1. Instalar Git
-sudo apt update && sudo apt install -y git
-
-# 2. Instalar OpenClaw
+# 1. Instalar OpenClaw
 #    El instalador maneja Node.js automáticamente
 curl -fsSL https://openclaw.ai/install.sh | bash
 
