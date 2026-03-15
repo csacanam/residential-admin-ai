@@ -74,37 +74,10 @@ cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
 # 6. Crear y editar el archivo de credenciales
 cp ~/residential-admin-ai/.env.example ~/residential-admin-ai/.env
 nano ~/residential-admin-ai/.env
-```
+#    Llena los 5 campos vacíos: OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
+#    AGENT_EMAIL, ADMIN_EMAIL
+#    Para guardar: Ctrl+O → Enter → Ctrl+X
 
-En nano, reemplaza solo los valores que están vacíos. El archivo debe quedar así (copia, pega y llena los 5 campos):
-
-```
-OPENAI_API_KEY=sk-...
-OPENAI_DEFAULT_MODEL=gpt-4.1-mini
-OPENAI_FALLBACK_MODEL=gpt-4.1-nano
-
-KAPSO_API_KEY=
-KAPSO_PHONE_NUMBER_ID=
-KAPSO_BASE_URL=https://api.kapso.ai/meta/whatsapp
-
-AGENT_EMAIL=
-ADMIN_EMAIL=
-
-DAILY_USD_BUDGET=1.00
-WEEKLY_USD_BUDGET=5.00
-MONTHLY_USD_BUDGET=20.00
-
-COUNTRY=CO
-TIMEZONE=America/Bogota
-CURRENCY=COP
-
-ADMIN_NAME=
-COMPANY_NAME=
-```
-
-Para guardar en nano: `Ctrl+O` → Enter → `Ctrl+X`
-
-```bash
 # 7. Arrancar el gateway
 openclaw gateway --port 18789
 ```
