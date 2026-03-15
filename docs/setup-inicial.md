@@ -102,26 +102,46 @@ Una vez aprobada, el nombre `cobro_cartera_v1` se registra en `conjunto.json` de
 
 ---
 
-## Paso 4 — Instalar el skill GOG (Google Workspace)
+## Paso 4 — Instalar y configurar el skill GOG (Google Workspace)
 
-GOG es un skill de OpenClaw que permite al agente leer correos, enviar correos y trabajar con Google Drive. Se instala directamente desde el chat del agente — no requiere configuración manual ni credenciales en `.env`.
+GOG es un skill de OpenClaw que permite al agente leer y enviar correos y trabajar con Google Drive. Requiere crear credenciales OAuth en Google Cloud Console.
 
 ### Crear el correo del agente
 
 1. Crear una cuenta de Gmail nueva. Ejemplo: `agente.nombreconjunto@gmail.com`.
 2. **No usar el correo personal del administrador** — debe ser una cuenta separada y dedicada al agente.
 
-### Instalar el skill
+### Crear credenciales OAuth en Google Cloud Console
+
+1. Ir a [console.cloud.google.com](https://console.cloud.google.com) con la cuenta del agente.
+2. Crear un proyecto nuevo. Nombre sugerido: `residential-admin-ai`.
+3. Ir a **APIs y servicios → Habilitar APIs** y activar: Gmail API y Google Drive API.
+4. Ir a **APIs y servicios → Credenciales → Crear credenciales → ID de cliente OAuth 2.0**.
+5. Tipo de aplicación: **App de escritorio**. Nombre: `gog-agent`.
+6. Descargar el archivo JSON de credenciales (`client_secret_*.json`). **Solo se descarga una vez.**
+
+### Instalar el skill GOG
 
 Con OpenClaw corriendo, escribirle al agente en Telegram:
 
 > "Instala el skill de GOG Google Workspace"
 
-OpenClaw descargará e instalará el skill automáticamente y pedirá autorizar la cuenta de Google. Seguir las instrucciones que dé el agente para autenticar el Gmail del agente.
+OpenClaw descargará e instalará el skill y el binario `gog` automáticamente.
 
-**El correo del agente va en `.env` como `AGENT_EMAIL`** para que los skills sepan a qué cuenta hacer referencia.
+### Autenticar el agente
 
-> Una vez instalado, verificar que funciona pidiéndole al agente: "¿Tienes correos nuevos?"
+Una vez instalado el skill, en la terminal del computador:
+
+```bash
+gog auth credentials ~/Downloads/client_secret_*.json
+gog auth add agente.nombreconjunto@gmail.com
+```
+
+El segundo comando abre el navegador para autorizar el acceso. Iniciar sesión con el Gmail del agente y aceptar los permisos.
+
+**El correo del agente va en `.env` como `AGENT_EMAIL`.**
+
+> Verificar que funciona pidiéndole al agente en Telegram: "¿Tienes correos nuevos?"
 
 ---
 

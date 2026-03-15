@@ -121,13 +121,16 @@ echo "   1. Verifica que el .env esté completo:"
 echo "      nano $REPO_DIR/.env"
 echo ""
 
-# Verificar si el skill GOG está instalado
-GOG_SKILL=$(find "$HOME" -path "*/skills/gogcli/SKILL.md" 2>/dev/null | head -1)
-if [ -n "$GOG_SKILL" ]; then
+# Verificar si GOG está instalado (skill + binario)
+GOG_SKILL=$(find "$HOME" -path "*/skills/gog*/SKILL.md" 2>/dev/null | head -1)
+if [ -n "$GOG_SKILL" ] || command -v gog &>/dev/null; then
   echo "   2. Skill GOG (Google Workspace) — ya instalado."
 else
-  echo "   2. Skill GOG no detectado. Instálalo escribiéndole al agente:"
-  echo "      \"Instala el skill de GOG Google Workspace\""
+  echo "   2. Skill GOG no detectado. Pasos:"
+  echo "      a. Crea credenciales OAuth en console.cloud.google.com"
+  echo "      b. Dile al agente: \"Instala el skill de GOG Google Workspace\""
+  echo "      c. Autentica con: gog auth credentials client_secret_*.json"
+  echo "      Ver docs/setup-inicial.md — Paso 4"
 fi
 
 echo ""
