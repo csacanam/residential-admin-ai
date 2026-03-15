@@ -124,7 +124,7 @@ GOG es un skill de OpenClaw que permite al agente leer y enviar correos y trabaj
 
 Con OpenClaw corriendo, escribirle al agente en Telegram:
 
-> "Instala el skill de GOG Google Workspace"
+> "Instala el skill gogcli de ClawHub"
 
 OpenClaw descargará e instalará el skill y el binario `gog` automáticamente.
 
