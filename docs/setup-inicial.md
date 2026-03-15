@@ -4,6 +4,8 @@ Esta guía es **para ti**, quien instala y configura el agente en el computador 
 
 Cada cuenta que creas acá queda a nombre del administrador (usa su correo o datos) y él paga directamente los servicios.
 
+> **Sistema operativo:** todas las instalaciones corren sobre **Ubuntu**.
+
 ---
 
 ## Paso 1 — Crear cuenta en OpenAI

@@ -53,25 +53,28 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 ### Instalación en el computador del cliente
 
 ```bash
-# 1. Instalar OpenClaw
+# 1. Instalar Git
+sudo apt update && sudo apt install -y git
+
+# 2. Instalar OpenClaw
 #    El instalador maneja Node.js automáticamente
 curl -fsSL https://openclaw.ai/install.sh | bash
 
-# 2. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
+# 3. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
 #    El asistente interactivo configura el workspace, el modelo y los canales
 openclaw onboard --install-daemon
 
-# 3. Clonar este repositorio dentro del workspace de OpenClaw
+# 4. Clonar este repositorio dentro del workspace de OpenClaw
 git clone git@github.com:csacanam/residential-admin-ai.git ~/.openclaw/workspace
 
-# 4. Crear el archivo de credenciales
+# 5. Crear el archivo de credenciales
 cp ~/.openclaw/workspace/.env.example ~/.openclaw/workspace/.env
 
-# 5. Llenar .env con las credenciales del cliente:
+# 6. Llenar .env con las credenciales del cliente:
 #    OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
 #    AGENT_EMAIL, ADMIN_EMAIL
 
-# 6. Arrancar el gateway
+# 7. Arrancar el gateway
 openclaw gateway --port 18789
 ```
 
