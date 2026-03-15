@@ -23,14 +23,15 @@ cd "$REPO_DIR" || {
   exit 1
 }
 
-# 2. Obtener cambios del repositorio central
-PULL_OUTPUT=$(git pull origin main 2>&1)
-PULL_EXIT=$?
+# 2. Obtener cambios del repositorio central (el remoto siempre manda)
+git fetch origin 2>&1 >> "$LOG_FILE"
+RESET_OUTPUT=$(git reset --hard origin/main 2>&1)
+RESET_EXIT=$?
 
-echo "[$TIMESTAMP] git pull: $PULL_OUTPUT" >> "$LOG_FILE"
+echo "[$TIMESTAMP] git reset: $RESET_OUTPUT" >> "$LOG_FILE"
 
-if [ $PULL_EXIT -ne 0 ]; then
-  echo "[$TIMESTAMP] ERROR: git pull falló. Revisa la conexión o el repositorio." >> "$LOG_FILE"
+if [ $RESET_EXIT -ne 0 ]; then
+  echo "[$TIMESTAMP] ERROR: git reset falló. Revisa la conexión o el repositorio." >> "$LOG_FILE"
   exit 1
 fi
 
