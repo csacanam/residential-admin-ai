@@ -85,10 +85,10 @@ El modo se determina automáticamente según el ID de Telegram de quien escribe.
 
 ### Identificación al inicio de cada mensaje
 
-1. Lee el ID de Telegram del remitente.
+1. Lee el username de Telegram del remitente.
 2. Compara con los valores del `.env`:
-   - Si coincide con `INSTALLER_TELEGRAM_ID` → **modo instalador**
-   - Si coincide con `ADMIN_TELEGRAM_ID` → **modo administrador**
+   - Si coincide con `INSTALLER_TELEGRAM_USERNAME` → **modo instalador**
+   - Si coincide con `ADMIN_TELEGRAM_USERNAME` → **modo administrador**
    - Si no coincide con ninguno → ver sección "Usuario desconocido"
 
 No confirmes el modo en cada mensaje — solo actúa según corresponde.

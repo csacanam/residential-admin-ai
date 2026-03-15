@@ -21,7 +21,7 @@ OpenAI es el motor de IA que genera las actas y procesa textos.
 
 **Esta clave va en `.env` como `OPENAI_API_KEY`.**
 
-> **Tip:** Para obtener el ID de Telegram del administrador o del instalador, escríbele al agente desde esa cuenta: *"¿Cuál es mi ID de Telegram?"* El agente lo reportará y lo copias al `.env`.
+> **Tip:** Para obtener el username de Telegram del administrador o del instalador, escríbele al agente desde esa cuenta: *"¿Cuál es mi username de Telegram?"* El agente lo reportará y lo copias al `.env` sin el @.
 
 ---
 
@@ -184,7 +184,7 @@ El administrador interactúa con el agente a través de Telegram. El bot se crea
 - [ ] Plantilla `cobro_cartera_v1` creada en Kapso y aprobada por Meta
 - [ ] Bot de Telegram creado en BotFather, token copiado
 - [ ] OpenClaw instalado y onboarding completado (token de Telegram ingresado)
-- [ ] `ADMIN_TELEGRAM_ID` e `INSTALLER_TELEGRAM_ID` en `.env`
+- [ ] `ADMIN_TELEGRAM_USERNAME` e `INSTALLER_TELEGRAM_USERNAME` en `.env`
 - [ ] Gmail del agente creado (no el correo personal del administrador)
 - [ ] GOG CLI instalado y autenticado con el Gmail del agente
 - [ ] `AGENT_EMAIL` en `.env`
