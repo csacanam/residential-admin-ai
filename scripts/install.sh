@@ -58,16 +58,37 @@ echo ""
 # -------------------------------------------------------------
 echo "[3/5] Copiando instrucciones al workspace de OpenClaw..."
 
-OPENCLAW_FILES="AGENTS.md SOUL.md IDENTITY.md MEMORY.md USER.md"
 OK=true
 
-for file in $OPENCLAW_FILES; do
+# Archivos estáticos
+for file in AGENTS.md SOUL.md MEMORY.md; do
   cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
-    echo "  $file — OK" || {
-    echo "  ERROR: No se pudo copiar $file a $WORKSPACE_DIR"
-    OK=false
-  }
+    echo "  $file — OK" || { echo "  ERROR: $file"; OK=false; }
 done
+
+# USER.md e IDENTITY.md se generan desde templates + .env (si ya existe)
+ENV_FILE="$REPO_DIR/.env"
+if [ -f "$ENV_FILE" ]; then
+  set -a; source "$ENV_FILE"; set +a
+
+  sed \
+    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
+    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
+    -e "s/{{ADMIN_TELEGRAM_USERNAME}}/${ADMIN_TELEGRAM_USERNAME:-[ADMIN_TELEGRAM_USERNAME]}/g" \
+    -e "s/{{INSTALLER_TELEGRAM_USERNAME}}/${INSTALLER_TELEGRAM_USERNAME:-[INSTALLER_TELEGRAM_USERNAME]}/g" \
+    "$REPO_DIR/openclaw/USER.md.template" > "$WORKSPACE_DIR/USER.md" && \
+    echo "  USER.md — generado" || { echo "  ERROR: USER.md"; OK=false; }
+
+  sed \
+    -e "s/{{AGENT_NAME}}/${AGENT_NAME:-Asistente}/g" \
+    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
+    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
+    "$REPO_DIR/openclaw/IDENTITY.md.template" > "$WORKSPACE_DIR/IDENTITY.md" && \
+    echo "  IDENTITY.md — generado" || { echo "  ERROR: IDENTITY.md"; OK=false; }
+else
+  echo "  ADVERTENCIA: .env no encontrado — USER.md e IDENTITY.md se generarán después."
+  echo "  Corre auto-update.sh una vez que el .env esté completo."
+fi
 
 if [ "$OK" = false ]; then
   echo "  Verifica que el onboarding de OpenClaw se haya completado."

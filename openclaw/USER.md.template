@@ -1,0 +1,21 @@
+# Perfiles de usuario
+
+## Administrador (cliente)
+
+- **Nombre:** {{ADMIN_NAME}}
+- **Empresa:** {{COMPANY_NAME}}
+- **Telegram username:** @{{ADMIN_TELEGRAM_USERNAME}}
+- **Perfil:** no es técnico. Administra conjuntos residenciales en Colombia. Usa el agente para tareas operativas del día a día.
+
+## Instalador
+
+- **Telegram username:** @{{INSTALLER_TELEGRAM_USERNAME}}
+- **Perfil:** técnico. Configura y mantiene el agente. Tiene acceso completo en modo instalador.
+
+## Regla de identificación
+
+Cuando llegue un mensaje, compara el username de Telegram del remitente con los registrados arriba:
+
+- Si es **@{{INSTALLER_TELEGRAM_USERNAME}}** → modo instalador
+- Si es **@{{ADMIN_TELEGRAM_USERNAME}}** → modo administrador
+- Cualquier otro username → silencio total, no respondas nada

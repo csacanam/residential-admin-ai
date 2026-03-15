@@ -36,11 +36,40 @@ if [ $RESET_EXIT -ne 0 ]; then
 fi
 
 # 3. Sincronizar archivos de instrucciones al workspace de OpenClaw
-for file in AGENTS.md SOUL.md IDENTITY.md MEMORY.md USER.md; do
+# Los archivos estáticos se copian directo
+for file in AGENTS.md SOUL.md MEMORY.md; do
   cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
     echo "[$TIMESTAMP] $file sincronizado." >> "$LOG_FILE" || \
     echo "[$TIMESTAMP] ERROR: No se pudo copiar $file" >> "$LOG_FILE"
 done
+
+# USER.md e IDENTITY.md se generan desde templates + .env
+ENV_FILE="$REPO_DIR/.env"
+if [ -f "$ENV_FILE" ]; then
+  # Cargar variables del .env
+  set -a; source "$ENV_FILE"; set +a
+
+  # Generar USER.md
+  sed \
+    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
+    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
+    -e "s/{{ADMIN_TELEGRAM_USERNAME}}/${ADMIN_TELEGRAM_USERNAME:-[ADMIN_TELEGRAM_USERNAME]}/g" \
+    -e "s/{{INSTALLER_TELEGRAM_USERNAME}}/${INSTALLER_TELEGRAM_USERNAME:-[INSTALLER_TELEGRAM_USERNAME]}/g" \
+    "$REPO_DIR/openclaw/USER.md.template" > "$WORKSPACE_DIR/USER.md" && \
+    echo "[$TIMESTAMP] USER.md generado." >> "$LOG_FILE" || \
+    echo "[$TIMESTAMP] ERROR: No se pudo generar USER.md" >> "$LOG_FILE"
+
+  # Generar IDENTITY.md
+  sed \
+    -e "s/{{AGENT_NAME}}/${AGENT_NAME:-Asistente}/g" \
+    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
+    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
+    "$REPO_DIR/openclaw/IDENTITY.md.template" > "$WORKSPACE_DIR/IDENTITY.md" && \
+    echo "[$TIMESTAMP] IDENTITY.md generado." >> "$LOG_FILE" || \
+    echo "[$TIMESTAMP] ERROR: No se pudo generar IDENTITY.md" >> "$LOG_FILE"
+else
+  echo "[$TIMESTAMP] ADVERTENCIA: .env no encontrado — USER.md e IDENTITY.md no generados." >> "$LOG_FILE"
+fi
 
 # 4. Agregar symlinks para skills nuevos en el repo
 for skill_dir in "$SKILLS_SRC"/*/; do
