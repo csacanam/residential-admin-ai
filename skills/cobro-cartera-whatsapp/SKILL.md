@@ -113,6 +113,16 @@ Descarga el adjunto y procésalo directamente.
 Acepta `.csv` y `.xlsx`. Si no hay ningún archivo disponible por ninguna vía:
 > "No encontré el archivo de cartera. Puedes copiarlo en `cartera/input/` o enviármelo al correo del agente."
 
+### Verificar que puedes abrir el archivo ANTES de intentar procesarlo
+
+**Si el archivo es `.csv`:** léelo directamente, no requiere ninguna herramienta adicional.
+
+**Si el archivo es `.xlsx`:** intenta abrirlo. Si no puedes (falta python3, openpyxl u otra dependencia), detente de inmediato y avisa:
+
+> "El archivo está en formato Excel (.xlsx) y no tengo las herramientas instaladas para abrirlo. Expórtalo como CSV desde Excel (Archivo → Guardar como → CSV) y vuelve a intentarlo."
+
+No intentes instalar herramientas ni buscar alternativas. Solo avisa y espera que el usuario convierta el archivo.
+
 ---
 
 ## Paso 3 — Validar el archivo antes de cualquier otra acción
