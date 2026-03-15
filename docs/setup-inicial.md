@@ -102,59 +102,26 @@ Una vez aprobada, el nombre `cobro_cartera_v1` se registra en `conjunto.json` de
 
 ---
 
-## Paso 4 — Instalar GOG CLI y conectar Google Workspace
+## Paso 4 — Instalar el skill GOG (Google Workspace)
 
-GOG CLI permite al agente leer y enviar correos, y subir archivos a Google Drive. Se instala en el computador del cliente (Ubuntu).
+GOG es un skill de OpenClaw que permite al agente leer correos, enviar correos y trabajar con Google Drive. Se instala directamente desde el chat del agente — no requiere configuración manual ni credenciales en `.env`.
 
 ### Crear el correo del agente
 
 1. Crear una cuenta de Gmail nueva. Ejemplo: `agente.nombreconjunto@gmail.com`.
 2. **No usar el correo personal del administrador** — debe ser una cuenta separada y dedicada al agente.
 
-### Crear credenciales OAuth en Google Cloud
+### Instalar el skill
 
-1. Ir a [console.cloud.google.com](https://console.cloud.google.com) con la cuenta del agente.
-2. Crear un proyecto nuevo. Nombre sugerido: `residential-admin-ai`.
-3. Ir a **APIs y servicios → Habilitar APIs** y activar:
-   - Gmail API
-   - Google Drive API
-4. Ir a **APIs y servicios → Credenciales → Crear credenciales → ID de cliente OAuth 2.0**.
-5. Tipo de aplicación: **App de escritorio**. Nombre: `gog-agent`.
-6. Descargar el archivo JSON de credenciales.
+Con OpenClaw corriendo, escribirle al agente en Telegram:
 
-### Instalar GOG CLI en Ubuntu
+> "Instala el skill de GOG Google Workspace"
 
-```bash
-# Opción A — con Homebrew (si está disponible en el equipo)
-brew install gogcli
+OpenClaw descargará e instalará el skill automáticamente y pedirá autorizar la cuenta de Google. Seguir las instrucciones que dé el agente para autenticar el Gmail del agente.
 
-# Opción B — desde código fuente (requiere Go 1.25+)
-git clone https://github.com/steipete/gogcli.git
-cd gogcli && make
-sudo cp bin/gog /usr/local/bin/gog
-```
+**El correo del agente va en `.env` como `AGENT_EMAIL`** para que los skills sepan a qué cuenta hacer referencia.
 
-Verificar instalación:
-```bash
-gog --version
-```
-
-### Autenticar el agente
-
-```bash
-# Registrar las credenciales OAuth descargadas
-gog auth credentials ~/Downloads/client_secret_*.json
-
-# Iniciar sesión con el correo del agente (abre el navegador)
-gog auth add agente.nombreconjunto@gmail.com --services gmail,drive
-
-# Verificar que funciona
-gog gmail labels list
-```
-
-**El correo del agente va en `.env` como `AGENT_EMAIL`.**
-
-> **Nota:** GOG guarda los tokens en el keyring del sistema. No es necesario repetir la autenticación salvo que se revoque el acceso.
+> Una vez instalado, verificar que funciona pidiéndole al agente: "¿Tienes correos nuevos?"
 
 ---
 
