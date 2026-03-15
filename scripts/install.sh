@@ -60,11 +60,17 @@ echo "[3/5] Copiando instrucciones al workspace de OpenClaw..."
 
 OK=true
 
-# Archivos estáticos
-for file in AGENTS.md SOUL.md MEMORY.md; do
+# Archivos estáticos (MEMORY.md NO — lo gestiona el agente)
+for file in AGENTS.md SOUL.md; do
   cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
     echo "  $file — OK" || { echo "  ERROR: $file"; OK=false; }
 done
+
+# Crear MEMORY.md vacío solo si no existe (el agente lo gestiona)
+if [ ! -f "$WORKSPACE_DIR/MEMORY.md" ]; then
+  touch "$WORKSPACE_DIR/MEMORY.md"
+  echo "  MEMORY.md — creado vacío"
+fi
 
 # USER.md e IDENTITY.md se generan desde templates + .env (si ya existe)
 ENV_FILE="$REPO_DIR/.env"

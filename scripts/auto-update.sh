@@ -36,8 +36,8 @@ if [ $RESET_EXIT -ne 0 ]; then
 fi
 
 # 3. Sincronizar archivos de instrucciones al workspace de OpenClaw
-# Los archivos estáticos se copian directo
-for file in AGENTS.md SOUL.md MEMORY.md; do
+# Los archivos estáticos se copian directo (MEMORY.md NO — lo gestiona el agente)
+for file in AGENTS.md SOUL.md; do
   cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
     echo "[$TIMESTAMP] $file sincronizado." >> "$LOG_FILE" || \
     echo "[$TIMESTAMP] ERROR: No se pudo copiar $file" >> "$LOG_FILE"

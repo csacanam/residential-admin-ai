@@ -12,7 +12,14 @@
       "Bash(git pull:*)",
       "WebFetch(domain:openclaw.ai)",
       "WebFetch(domain:docs.openclaw.ai)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:clawhub.com)",
+      "WebFetch(domain:clawhub.ai)",
+      "WebFetch(domain:gogcli.sh)",
+      "Bash(git update-index:*)",
+      "WebSearch",
+      "WebFetch(domain:nwosunneoma.medium.com)",
+      "WebFetch(domain:lumadock.com)"
     ]
   }
 }
