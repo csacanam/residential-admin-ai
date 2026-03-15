@@ -128,7 +128,7 @@ if [ -n "$GOG_SKILL" ] || command -v gog &>/dev/null; then
 else
   echo "   2. Skill gogcli no detectado. Pasos:"
   echo "      a. Crea credenciales OAuth en console.cloud.google.com"
-  echo "      b. Dile al agente: \"Instala el skill gogcli de ClawHub\""
+  echo "      b. Dile al agente: \"Instala el skill GOG Google Workspace\""
   echo "      c. Autentica con: gog auth credentials client_secret_*.json"
   echo "      Ver docs/setup-inicial.md — Paso 4"
 fi
