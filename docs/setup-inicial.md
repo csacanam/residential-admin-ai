@@ -108,22 +108,35 @@ El agente necesita su propio correo de Google — separado del correo personal d
 
 ### Configurar acceso a Google Drive y Gmail
 
+> **Nota técnica:** Google tiene dos tipos de credenciales. Las **cuentas de servicio** sirven para Google Drive (subir y compartir archivos). Para **enviar correos desde Gmail** se necesita OAuth2 o una contraseña de aplicación — las cuentas de servicio no funcionan con Gmail personal. Este setup cubre ambos casos.
+
+#### Parte A — Credenciales OAuth2 para Google Drive y Gmail
+
 1. Ir a [console.cloud.google.com](https://console.cloud.google.com) con la cuenta del agente.
 2. Crear un proyecto nuevo. Nombre sugerido: `residential-admin-ai`.
 3. Activar las APIs:
    - **Google Drive API**
    - **Gmail API**
-4. Ir a **Credenciales → Crear credencial → Cuenta de servicio**.
+4. Ir a **Credenciales → Crear credencial → ID de cliente de OAuth**.
+   - Tipo de aplicación: **Aplicación de escritorio**
    - Nombre: `residential-admin-ai`
-   - Rol: Editor
-5. Una vez creada, ir a la cuenta de servicio → **Claves → Agregar clave → JSON**.
-6. Descargar el archivo JSON.
-7. En el computador del cliente, copiar ese archivo a `credentials/google-service-account.json` dentro de la carpeta de instalación.
+5. Descargar el archivo JSON de credenciales.
+6. En el computador del cliente, copiar ese archivo a `credentials/google-oauth-credentials.json`.
+7. La primera vez que el agente use Google, se abrirá una ventana del navegador pidiendo autorización con la cuenta del agente. Autorizarla. Esto solo ocurre una vez.
+
+#### Parte B — Contraseña de aplicación para envío de Gmail
+
+1. Con la cuenta del agente, ir a [myaccount.google.com/security](https://myaccount.google.com/security).
+2. Activar la **verificación en dos pasos** si no está activa.
+3. Ir a **Contraseñas de aplicaciones**.
+4. Crear una nueva contraseña. Nombre sugerido: `residential-admin-ai`.
+5. Copiar la contraseña de 16 caracteres generada.
 
 **Estas credenciales van en `.env` como:**
 - `AGENT_EMAIL` ← el Gmail recién creado
 - `ADMIN_EMAIL` ← el correo personal del administrador (donde recibirá documentos)
-- `GOOGLE_CREDENTIALS_JSON` ← `./credentials/google-service-account.json`
+- `GOOGLE_CREDENTIALS_JSON` ← `./credentials/google-oauth-credentials.json`
+- `GMAIL_APP_PASSWORD` ← la contraseña de aplicación de 16 caracteres
 
 ---
 
@@ -145,7 +158,8 @@ El agente necesita su propio correo de Google — separado del correo personal d
 - [ ] API Key y Instance ID de Kapso en `.env`
 - [ ] Plantilla `cobro_cartera_v1` creada en Kapso y aprobada por Meta
 - [ ] Gmail del agente creado (no el personal del administrador)
-- [ ] JSON de Google en `credentials/` y rutas en `.env`
+- [ ] JSON de OAuth2 de Google en `credentials/` y ruta en `.env`
+- [ ] Contraseña de aplicación de Gmail generada y en `.env` como `GMAIL_APP_PASSWORD`
 - [ ] `AGENT_EMAIL` y `ADMIN_EMAIL` en `.env`
 - [ ] `/configurar-conjunto` ejecutado para cada conjunto del administrador
 - [ ] Prueba de acta con transcripción de ejemplo completada
