@@ -102,31 +102,77 @@ Una vez aprobada, el nombre `cobro_cartera_v1` se registra en `conjunto.json` de
 
 ---
 
-## Paso 4 — Configurar Google Workspace del agente (skill GOG)
+## Paso 4 — Instalar GOG CLI y conectar Google Workspace
 
-El agente necesita su propio correo de Google para enviar documentos al administrador y recibir archivos. La integración se hace a través del **skill GOG de OpenClaw**, que maneja Google Drive y Gmail internamente — no se configuran credenciales manuales en `.env`.
+GOG CLI permite al agente leer y enviar correos, y subir archivos a Google Drive. Se instala en el computador del cliente (Ubuntu).
 
 ### Crear el correo del agente
 
 1. Crear una cuenta de Gmail nueva. Ejemplo: `agente.nombreconjunto@gmail.com`.
 2. **No usar el correo personal del administrador** — debe ser una cuenta separada y dedicada al agente.
 
-### Conectar Google en OpenClaw
+### Crear credenciales OAuth en Google Cloud
 
-1. Con OpenClaw corriendo, ejecutar:
-   ```bash
-   openclaw channels login
-   ```
-2. Seleccionar **Google Workspace / GOG** en el asistente de canales.
-3. Iniciar sesión con la cuenta del agente recién creada y autorizar los permisos de Drive y Gmail.
-4. La autorización se guarda en OpenClaw y no es necesario repetirla.
+1. Ir a [console.cloud.google.com](https://console.cloud.google.com) con la cuenta del agente.
+2. Crear un proyecto nuevo. Nombre sugerido: `residential-admin-ai`.
+3. Ir a **APIs y servicios → Habilitar APIs** y activar:
+   - Gmail API
+   - Google Drive API
+4. Ir a **APIs y servicios → Credenciales → Crear credenciales → ID de cliente OAuth 2.0**.
+5. Tipo de aplicación: **App de escritorio**. Nombre: `gog-agent`.
+6. Descargar el archivo JSON de credenciales.
 
-### Registrar los correos en `.env`
+### Instalar GOG CLI en Ubuntu
 
-Aunque la autenticación la maneja GOG, el agente necesita saber a quién enviarle los documentos:
+```bash
+# Opción A — con Homebrew (si está disponible en el equipo)
+brew install gogcli
 
-- `AGENT_EMAIL` ← el Gmail del agente recién creado
-- `ADMIN_EMAIL` ← el correo personal del administrador (donde recibirá documentos)
+# Opción B — desde código fuente (requiere Go 1.25+)
+git clone https://github.com/steipete/gogcli.git
+cd gogcli && make
+sudo cp bin/gog /usr/local/bin/gog
+```
+
+Verificar instalación:
+```bash
+gog --version
+```
+
+### Autenticar el agente
+
+```bash
+# Registrar las credenciales OAuth descargadas
+gog auth credentials ~/Downloads/client_secret_*.json
+
+# Iniciar sesión con el correo del agente (abre el navegador)
+gog auth add agente.nombreconjunto@gmail.com --services gmail,drive
+
+# Verificar que funciona
+gog gmail labels list
+```
+
+**El correo del agente va en `.env` como `AGENT_EMAIL`.**
+
+> **Nota:** GOG guarda los tokens en el keyring del sistema. No es necesario repetir la autenticación salvo que se revoque el acceso.
+
+---
+
+## Paso 5 — Crear el bot de Telegram (antes del onboarding de OpenClaw)
+
+El administrador interactúa con el agente a través de Telegram. El bot se crea con BotFather y sus datos se ingresan durante el proceso de instalación de OpenClaw (`openclaw onboard`). **Hacer este paso antes de correr el onboarding.**
+
+### Crear el bot en BotFather
+
+1. En Telegram, buscar `@BotFather` y abrir el chat.
+2. Enviar `/newbot`.
+3. Elegir un nombre visible (ej: `Agente Admin Bosques`).
+4. Elegir un username único terminado en `bot` (ej: `agente_bosques_bot`).
+5. BotFather entregará un **token de acceso** con formato `123456789:AAF...`.
+
+**Guardar este token.** OpenClaw lo pedirá durante el onboarding.
+
+> El administrador debe hablar con el agente únicamente a través de este bot. Compartirle el username del bot una vez que la instalación esté completa.
 
 ---
 
@@ -136,7 +182,7 @@ Aunque la autenticación la maneja GOG, el agente necesita saber a quién enviar
 |---|---|---|
 | OpenAI | Administrador (cliente) | Créditos por consumo — recarga manual o automática |
 | Kapso | Administrador (cliente) | Por mensajes enviados según plan |
-| Google | No requiere tarjeta en uso normal | Gratis dentro de límites estándar |
+| Google | Gratis (dentro de límites normales) | Sin costo para uso básico de Gmail y Drive |
 
 ---
 
@@ -147,10 +193,11 @@ Aunque la autenticación la maneja GOG, el agente necesita saber a quién enviar
 - [ ] Cuenta Kapso creada, número WhatsApp conectado, tarjeta del cliente agregada
 - [ ] `KAPSO_API_KEY` y `KAPSO_PHONE_NUMBER_ID` en `.env`
 - [ ] Plantilla `cobro_cartera_v1` creada en Kapso y aprobada por Meta
-- [ ] Gmail del agente creado (no el personal del administrador)
-- [ ] Google Workspace conectado en OpenClaw via skill GOG (`openclaw channels login`)
-- [ ] `AGENT_EMAIL` y `ADMIN_EMAIL` en `.env`
+- [ ] Bot de Telegram creado en BotFather, token copiado
+- [ ] OpenClaw instalado y onboarding completado (token de Telegram ingresado)
+- [ ] Gmail del agente creado (no el correo personal del administrador)
+- [ ] GOG CLI instalado y autenticado con el Gmail del agente
+- [ ] `AGENT_EMAIL` en `.env`
 - [ ] `/configurar-conjunto` ejecutado para cada conjunto del administrador
 - [ ] Prueba de acta con transcripción de ejemplo completada
 - [ ] Prueba de cartera con CSV de ejemplo completada (sin envío real)
-- [ ] Documentos de prueba llegaron al correo del administrador

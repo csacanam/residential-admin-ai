@@ -99,11 +99,7 @@ Ejemplo:
 
 Si ya existe un archivo con ese nombre, agrega un sufijo `-v2`, `-v3`, etc.
 
-## Paso 8 — Entregar el acta al administrador
-
-1. Sube el acta a Google Drive usando las credenciales de `GOOGLE_CREDENTIALS_JSON`.
-2. Comparte el archivo con permiso "cualquier persona con el enlace puede ver".
-3. Envía el enlace por correo al administrador (`contacto.email_admin` del conjunto o `ADMIN_EMAIL` del `.env`), con asunto: `Acta [tipo de reunión] — [nombre conjunto] — [fecha]`.
+## Paso 8 — Confirmar y mostrar ruta del archivo
 
 Muestra el resumen en el chat:
 
@@ -112,10 +108,8 @@ Acta generada correctamente.
 - Conjunto: [nombre]
 - Tipo de reunión: [tipo]
 - Fecha: [fecha]
-- Guardada localmente en: [ruta relativa]
+- Guardada en: [ruta completa del archivo]
 - Campos marcados como [PENDIENTE]: [número o "ninguno"]
-- En Drive: [enlace]
-- Correo enviado a: [email_admin]
 - Tokens estimados: ~[N]
 - Costo estimado: USD [X.XX]
 ```

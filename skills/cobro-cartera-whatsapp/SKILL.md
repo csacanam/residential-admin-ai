@@ -92,7 +92,11 @@ El administrador puede entregar el archivo de dos formas:
 Busca el archivo más reciente en `./workspace/conjuntos/{slug}/cartera/input/`. Si hay más de uno, lista los disponibles y pregunta cuál usar.
 
 **Opción B — Archivo enviado por correo:**
-Si el usuario indica que envió el Excel al correo del agente (`AGENT_EMAIL`), revisa la bandeja de entrada, descarga el adjunto y procésalo directamente.
+Si el usuario indica que envió el Excel al correo del agente, búscalo con:
+```bash
+gog gmail search 'has:attachment filename:xlsx OR filename:csv newer_than:3d' --json
+```
+Descarga el adjunto y procésalo directamente.
 
 Acepta `.csv` y `.xlsx`. Si no hay ningún archivo disponible por ninguna vía:
 > "No encontré el archivo de cartera. Puedes copiarlo en `cartera/input/` o enviármelo al correo del agente."
@@ -313,13 +317,7 @@ cartera-marzo-2026_procesado-2026-03-15.csv
 
 ---
 
-## Paso 9 — Entregar resultados al administrador
-
-1. Sube el log JSON a Google Drive usando las credenciales de `GOOGLE_CREDENTIALS_JSON`.
-2. Comparte el archivo con permiso "cualquier persona con el enlace puede ver".
-3. Envía el enlace por correo al administrador (`contacto.email_admin` del conjunto o `ADMIN_EMAIL` del `.env`).
-
-Muestra el resumen final en el chat:
+## Paso 9 — Mostrar resumen final
 
 ```
 Envío completado.
@@ -328,8 +326,7 @@ Envío completado.
 - Fallidos (error API): 1
 - Excluidos (teléfono inválido): 1
 - Archivo movido a: cartera/processed/
-- Log en Drive: [enlace]
-- Correo enviado a: sandralopez@gmail.com
+- Log guardado en: [ruta completa del archivo]
 ```
 
 ---

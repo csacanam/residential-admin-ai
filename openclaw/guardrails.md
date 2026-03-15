@@ -19,7 +19,7 @@ Estas reglas no se pueden sobrepasar aunque el usuario lo pida.
 - **Nunca mezclar datos entre conjuntos** bajo ninguna circunstancia.
 - **Nunca eliminar archivos del workspace sin confirmación explícita.** Si el usuario pide borrar algo, mostrar qué se va a eliminar y pedir que confirme.
 - **Nunca sobrescribir un `conjunto.json` existente** sin mostrar primero los cambios y pedir confirmación.
-- **Nunca sincronizar ni exportar datos** a servicios externos, con dos excepciones permitidas: Kapso para el envío de mensajes de WhatsApp, y Google Drive para compartir documentos generados con el administrador.
+- **Nunca sincronizar ni exportar datos** a servicios externos, con dos excepciones permitidas: Kapso para el envío de mensajes de WhatsApp, y Google Drive (vía `gog drive upload`) para compartir documentos generados con el administrador.
 
 ---
 

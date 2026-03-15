@@ -48,7 +48,7 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 
 - Cuenta de OpenAI con API key y créditos cargados
 - Cuenta de Kapso con API key, número WhatsApp conectado y plantilla aprobada
-- Cuenta de Google dedicada para el agente (Gmail)
+- Cuenta de Gmail dedicada para el agente y GOG CLI autenticado
 
 ### Instalación en el computador del cliente
 
@@ -59,14 +59,18 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 
 # 2. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
 #    El asistente interactivo configura el workspace, el modelo y los canales
+#    ANTES de correr esto: tener a la mano el token del bot de Telegram (ver docs/setup-inicial.md Paso 5)
 openclaw onboard --install-daemon
 
 # 3. Clonar este repositorio en una carpeta propia (NO dentro del workspace)
 git clone https://github.com/csacanam/residential-admin-ai.git ~/residential-admin-ai
 
-# 4. Enlazar los skills al directorio de skills de OpenClaw
-#    OpenClaw carga skills desde ~/.openclaw/skills/ automáticamente
-ln -s ~/residential-admin-ai/skills ~/.openclaw/skills
+# 4. Enlazar los skills al directorio correcto de OpenClaw (~/.agents/skills)
+#    No se reemplaza el directorio completo — se enlaza cada skill individualmente
+#    para no borrar skills existentes que OpenClaw pueda tener instalados
+ln -s ~/residential-admin-ai/skills/actas-reunion ~/.agents/skills/actas-reunion
+ln -s ~/residential-admin-ai/skills/cobro-cartera-whatsapp ~/.agents/skills/cobro-cartera-whatsapp
+ln -s ~/residential-admin-ai/skills/configurar-conjunto ~/.agents/skills/configurar-conjunto
 
 # 5. Copiar CLAUDE.md al workspace de OpenClaw
 cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
@@ -74,25 +78,18 @@ cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
 # 6. Crear y editar el archivo de credenciales
 cp ~/residential-admin-ai/.env.example ~/residential-admin-ai/.env
 nano ~/residential-admin-ai/.env
-#    Llena los 5 campos vacíos: OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
-#    AGENT_EMAIL, ADMIN_EMAIL
+#    Llena los 3 campos vacíos: OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID
 #    Para guardar: Ctrl+O → Enter → Ctrl+X
 
-# 7. Arrancar el gateway
+# 7. Activar la actualización automática de skills (cron diario a las 3am)
+chmod +x ~/residential-admin-ai/scripts/auto-update.sh
+(crontab -l 2>/dev/null; echo "0 3 * * * $HOME/residential-admin-ai/scripts/auto-update.sh") | crontab -
+
+# 8. Arrancar el gateway
 openclaw gateway --port 18789
 ```
 
 El dashboard queda disponible en `http://127.0.0.1:18789/`
-
-### Configurar el skill de Google Workspace (GOG)
-
-La integración con Google Drive y Gmail se hace a través del skill GOG de OpenClaw. Configurarlo desde el dashboard o con:
-
-```bash
-openclaw channels login
-```
-
-Ver instrucciones detalladas en [docs/setup-inicial.md](docs/setup-inicial.md) → Paso 4.
 
 ### Primer uso — registrar los conjuntos del cliente
 
@@ -115,12 +112,18 @@ El agente guiará el proceso para registrar cada conjunto (nombre, NIT, banco, c
 
 ## Actualizaciones
 
-Cuando publiques mejoras de skills o plantillas, en el computador del cliente:
+Cada instalación tiene un cron job que corre a las 3am y ejecuta `scripts/auto-update.sh`. Este script:
+
+1. Hace `git pull origin main` en `~/residential-admin-ai`
+2. Copia `CLAUDE.md` al workspace de OpenClaw
+3. Verifica que el symlink de skills siga en pie (y lo recrea si no)
+
+**Para publicar una actualización a todos los clientes:** simplemente haz `git push` al repositorio. Antes del día siguiente todos los clientes tendrán la versión más reciente.
+
+Los logs de cada actualización quedan en `~/residential-admin-ai/logs/auto-update.log`.
+
+Para forzar una actualización inmediata en un cliente específico:
 
 ```bash
-cd ~/residential-admin-ai
-git pull origin main
-cp CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
+~/residential-admin-ai/scripts/auto-update.sh
 ```
-
-Los skills se actualizan solos porque `~/.openclaw/skills` es un enlace directo a la carpeta del repo. Solo hay que copiar CLAUDE.md si cambió.
