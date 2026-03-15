@@ -116,14 +116,22 @@ echo " Instalación completada."
 echo "====================================================="
 echo ""
 echo " Próximos pasos:"
-echo "   1. Asegúrate de que el .env esté completo:"
+echo ""
+echo "   1. Verifica que el .env esté completo:"
 echo "      nano $REPO_DIR/.env"
 echo ""
-echo "   2. Instala GOG CLI y autentícalo con el Gmail del agente:"
-echo "      Ver docs/setup-inicial.md — Paso 4"
+
+# Verificar si GOG CLI está instalado
+if command -v gog &>/dev/null; then
+  echo "   2. GOG CLI — ya instalado ($(gog --version 2>/dev/null | head -1))."
+else
+  echo "   2. GOG CLI no está instalado. Instálalo y autentícalo:"
+  echo "      Ver docs/setup-inicial.md — Paso 4"
+fi
+
 echo ""
-echo "   3. En el chat del agente (Telegram), ejecuta:"
-echo "      /configurar-conjunto"
+echo "   3. Abre Telegram, busca el bot del agente y escríbele."
+echo "      El agente te guiará para configurar los conjuntos."
 echo ""
 echo " Para actualizar manualmente en cualquier momento:"
 echo "   $REPO_DIR/scripts/auto-update.sh"

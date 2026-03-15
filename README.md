@@ -69,11 +69,9 @@ El script clona el repo, enlaza los skills, copia CLAUDE.md, crea el .env y regi
 
 ### Primer uso — registrar los conjuntos del cliente
 
-Con OpenClaw corriendo, ejecutar en el chat del agente (Telegram):
+Con OpenClaw corriendo, el administrador abre Telegram y le escribe al bot en lenguaje natural:
 
-```
-/configurar-conjunto
-```
+> "Quiero configurar un conjunto" o "Agregar un conjunto nuevo"
 
 El agente guiará el proceso para registrar cada conjunto. Repetir para cada conjunto que maneja el administrador.
 
