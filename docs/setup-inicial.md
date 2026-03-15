@@ -147,6 +147,20 @@ El segundo comando abre el navegador para autorizar el acceso. Iniciar sesión c
 
 ---
 
+## Paso 4b — Personalizar la identidad del agente
+
+Antes de instalar, define el nombre y perfil del agente para este cliente. Todo va en el `.env` que se crea durante la instalación:
+
+| Campo | Descripción | Ejemplo |
+|---|---|---|
+| `AGENT_NAME` | Nombre con el que el agente se presenta | `Roma`, `Sofía`, `Asistente Admin` |
+| `ADMIN_NAME` | Nombre del administrador | `Sandra López` |
+| `COMPANY_NAME` | Nombre de la empresa administradora | `Inmobiliaria Bosques` |
+
+Estos valores los leen automáticamente `SOUL.md` e `IDENTITY.md` — no hay que editar esos archivos directamente.
+
+---
+
 ## Paso 5 — Crear el bot de Telegram (antes del onboarding de OpenClaw)
 
 El administrador interactúa con el agente a través de Telegram. El bot se crea con BotFather y sus datos se ingresan durante el proceso de instalación de OpenClaw (`openclaw onboard`). **Hacer este paso antes de correr el onboarding.**

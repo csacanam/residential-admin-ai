@@ -54,15 +54,25 @@ done
 echo ""
 
 # -------------------------------------------------------------
-# 3. Copiar CLAUDE.md al workspace de OpenClaw
+# 3. Copiar archivos de instrucciones al workspace de OpenClaw
 # -------------------------------------------------------------
-echo "[3/5] Copiando CLAUDE.md al workspace..."
+echo "[3/5] Copiando instrucciones al workspace de OpenClaw..."
 
-cp "$REPO_DIR/CLAUDE.md" "$WORKSPACE_DIR/CLAUDE.md" && echo "  OK" || {
-  echo "  ERROR: No se pudo copiar CLAUDE.md a $WORKSPACE_DIR"
-  echo "         Verifica que el onboarding de OpenClaw se haya completado."
+OPENCLAW_FILES="AGENTS.md SOUL.md IDENTITY.md MEMORY.md USER.md"
+OK=true
+
+for file in $OPENCLAW_FILES; do
+  cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
+    echo "  $file — OK" || {
+    echo "  ERROR: No se pudo copiar $file a $WORKSPACE_DIR"
+    OK=false
+  }
+done
+
+if [ "$OK" = false ]; then
+  echo "  Verifica que el onboarding de OpenClaw se haya completado."
   exit 1
-}
+fi
 
 echo ""
 
@@ -80,10 +90,13 @@ else
   echo "  nano $REPO_DIR/.env"
   echo ""
   echo "  Campos a completar:"
+  echo "    AGENT_NAME              ← nombre del agente (ej: Roma, Sofía)"
   echo "    OPENAI_API_KEY"
   echo "    KAPSO_API_KEY"
   echo "    KAPSO_PHONE_NUMBER_ID"
   echo "    AGENT_EMAIL"
+  echo "    ADMIN_TELEGRAM_USERNAME"
+  echo "    INSTALLER_TELEGRAM_USERNAME"
   echo "    ADMIN_NAME"
   echo "    COMPANY_NAME"
   echo ""

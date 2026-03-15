@@ -35,10 +35,12 @@ if [ $RESET_EXIT -ne 0 ]; then
   exit 1
 fi
 
-# 3. Sincronizar CLAUDE.md al workspace de OpenClaw
-cp "$REPO_DIR/CLAUDE.md" "$WORKSPACE_DIR/CLAUDE.md" && \
-  echo "[$TIMESTAMP] CLAUDE.md sincronizado." >> "$LOG_FILE" || \
-  echo "[$TIMESTAMP] ERROR: No se pudo copiar CLAUDE.md a $WORKSPACE_DIR" >> "$LOG_FILE"
+# 3. Sincronizar archivos de instrucciones al workspace de OpenClaw
+for file in AGENTS.md SOUL.md IDENTITY.md MEMORY.md USER.md; do
+  cp "$REPO_DIR/openclaw/$file" "$WORKSPACE_DIR/$file" && \
+    echo "[$TIMESTAMP] $file sincronizado." >> "$LOG_FILE" || \
+    echo "[$TIMESTAMP] ERROR: No se pudo copiar $file" >> "$LOG_FILE"
+done
 
 # 4. Agregar symlinks para skills nuevos en el repo
 for skill_dir in "$SKILLS_SRC"/*/; do
