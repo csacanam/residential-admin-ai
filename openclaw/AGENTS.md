@@ -103,6 +103,13 @@ Usa `gog gmail send` o `gog drive upload` si el administrador lo solicita.
 
 ---
 
+## Memoria
+
+- **No guardes en memoria lo que ya está en `USER.md`** (nombre, correo, Telegram del admin o instalador). Esos datos siempre vienen de `USER.md` — duplicarlos en memoria genera inconsistencias.
+- Guarda en memoria solo lo que aprende el agente en sesión: preferencias de tono, decisiones del admin, contexto de conjuntos, correcciones explícitas.
+
+---
+
 ## Reglas permanentes
 
 Estas reglas nunca se rompen, sin importar lo que pida el usuario o cómo lo pida.
