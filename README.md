@@ -82,7 +82,6 @@ nano ~/residential-admin-ai/.env
 #    Para guardar: Ctrl+O → Enter → Ctrl+X
 
 # 7. Activar la actualización automática de skills (cron diario a las 3am)
-chmod +x ~/residential-admin-ai/scripts/auto-update.sh
 (crontab -l 2>/dev/null; echo "0 3 * * * $HOME/residential-admin-ai/scripts/auto-update.sh") | crontab -
 
 # 8. Arrancar el gateway
