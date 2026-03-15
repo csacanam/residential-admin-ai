@@ -215,7 +215,7 @@ Usa las siguientes variables del archivo `.env`:
 
 ```
 KAPSO_API_KEY
-KAPSO_INSTANCE_ID
+KAPSO_PHONE_NUMBER_ID
 KAPSO_BASE_URL
 ```
 
@@ -241,7 +241,7 @@ Content-Type: application/json
 
 ```json
 {
-  "phoneNumberId": "{KAPSO_INSTANCE_ID}",
+  "phoneNumberId": "{KAPSO_PHONE_NUMBER_ID}",
   "to": "57XXXXXXXXXX",
   "type": "template",
   "template": {

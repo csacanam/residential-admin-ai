@@ -53,33 +53,40 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 ### Instalación en el computador del cliente
 
 ```bash
-# 1. Instalar OpenClaw en el computador
-# (seguir instrucciones de openclaw.ai)
+# 1. Instalar Node.js 24 (requerido por OpenClaw)
+#    https://nodejs.org
 
-# 2. Clonar este repositorio
+# 2. Instalar OpenClaw
+curl -fsSL https://openclaw.ai/install.sh | bash
+# alternativa: npm install -g openclaw@latest
+
+# 3. Clonar este repositorio
 git clone git@github.com:csacanam/residential-admin-ai.git ~/residential-admin-ai
 cd ~/residential-admin-ai
 
-# 3. Crear el archivo de credenciales
+# 4. Crear el archivo de credenciales
 cp .env.example .env
 
-# 4. Llenar .env con las credenciales del cliente:
-#    OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_INSTANCE_ID,
-#    AGENT_EMAIL, ADMIN_EMAIL, GOOGLE_CREDENTIALS_JSON
+# 5. Llenar .env con las credenciales del cliente:
+#    OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
+#    AGENT_EMAIL, ADMIN_EMAIL, GOOGLE_CREDENTIALS_JSON, GMAIL_APP_PASSWORD
 
-# 5. Copiar el JSON de Google al lugar correcto
+# 6. Copiar el JSON de OAuth de Google al lugar correcto
 mkdir credentials
-# copiar google-service-account.json a credentials/
+# copiar google-oauth-credentials.json a credentials/
 
-# 6. Abrir OpenClaw apuntando a esta carpeta
-#    NO clonas dentro de OpenClaw — abres OpenClaw dentro de la carpeta clonada.
-#    OpenClaw leerá CLAUDE.md y skills/ desde ahí.
-cd ~/residential-admin-ai
-openclaw .
-#    (si OpenClaw acepta ruta como argumento: openclaw ~/residential-admin-ai)
+# 7. Hacer el onboarding inicial de OpenClaw (solo una vez por computador)
+openclaw onboard --install-daemon
+
+# 8. Conectar los canales del agente
+openclaw channels login
+
+# 9. Arrancar el gateway de OpenClaw
+openclaw gateway --port 18789
+# El dashboard queda disponible en http://127.0.0.1:18789/
 ```
 
-OpenClaw leerá `CLAUDE.md` automáticamente y el agente estará listo con su identidad y reglas.
+> **Nota:** la integración exacta entre OpenClaw y la carpeta del proyecto (dónde apunta para leer `CLAUDE.md` y `skills/`) debe verificarse en [docs.openclaw.ai](https://docs.openclaw.ai) durante la instalación. El repositorio está estructurado siguiendo las convenciones estándar de Claude Code en que OpenClaw está basado.
 
 ### Primer uso — registrar los conjuntos del cliente
 

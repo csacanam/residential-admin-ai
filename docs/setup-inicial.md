@@ -29,9 +29,12 @@ Kapso es el servicio que envía los mensajes de WhatsApp de cobro de cartera.
 2. Conectar el número de WhatsApp Business del administrador siguiendo las instrucciones de Kapso. El número debe estar disponible durante el proceso — Kapso enviará un código de verificación.
 3. Ir a **Billing** y agregar la tarjeta del administrador. Kapso cobra por mensajes enviados.
 4. Ir a **API Keys** y generar una clave nueva.
-5. Copiar la clave y el **Instance ID** (el identificador del número conectado).
+5. Copiar la clave.
+6. Buscar el **Phone Number ID** del número conectado — es un número de identificación numérico largo (ej: `647015955153740`). Está en la configuración del número dentro del panel de Kapso.
 
-**Estas credenciales van en `.env` como `KAPSO_API_KEY` y `KAPSO_INSTANCE_ID`.**
+**Estas credenciales van en `.env` como:**
+- `KAPSO_API_KEY` ← la clave de API
+- `KAPSO_PHONE_NUMBER_ID` ← el ID numérico del número conectado
 
 > **Importante:** el número conectado a Kapso no puede usarse como WhatsApp personal al mismo tiempo. Usar un número dedicado para la administración es lo recomendado.
 
@@ -155,7 +158,7 @@ El agente necesita su propio correo de Google — separado del correo personal d
 - [ ] Cuenta OpenAI creada, tarjeta del cliente agregada, $20 de créditos cargados
 - [ ] API Key de OpenAI en `.env`
 - [ ] Cuenta Kapso creada, número WhatsApp conectado, tarjeta del cliente agregada
-- [ ] API Key y Instance ID de Kapso en `.env`
+- [ ] `KAPSO_API_KEY` y `KAPSO_PHONE_NUMBER_ID` en `.env`
 - [ ] Plantilla `cobro_cartera_v1` creada en Kapso y aprobada por Meta
 - [ ] Gmail del agente creado (no el personal del administrador)
 - [ ] JSON de OAuth2 de Google en `credentials/` y ruta en `.env`
