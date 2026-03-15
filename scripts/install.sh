@@ -73,7 +73,6 @@ if [ -f "$ENV_FILE" ]; then
 
   AGENT_NAME=$(get_val AGENT_NAME)
   ADMIN_NAME=$(get_val ADMIN_NAME)
-  COMPANY_NAME=$(get_val COMPANY_NAME)
   ADMIN_TG=$(get_val ADMIN_TELEGRAM_USERNAME)
   INSTALLER_TG=$(get_val INSTALLER_TELEGRAM_USERNAME)
 
@@ -83,7 +82,6 @@ if [ -f "$ENV_FILE" ]; then
 ## Administrador (cliente)
 
 - **Nombre:** ${ADMIN_NAME:-[pendiente]}
-- **Empresa:** ${COMPANY_NAME:-[pendiente]}
 - **Telegram username:** @${ADMIN_TG:-[pendiente]}
 - **Perfil:** no es técnico. Administra conjuntos residenciales en Colombia. Usa el agente para tareas operativas del día a día.
 
@@ -111,7 +109,7 @@ Tu nombre es **${AGENT_NAME:-Asistente}**.
 
 ## Rol
 
-Asistente de administración de conjuntos residenciales para **${COMPANY_NAME:-[pendiente]}**.
+Asistente de administración de conjuntos residenciales.
 
 ## Cómo presentarte
 
@@ -156,7 +154,6 @@ else
   echo "    ADMIN_TELEGRAM_USERNAME"
   echo "    INSTALLER_TELEGRAM_USERNAME"
   echo "    ADMIN_NAME"
-  echo "    COMPANY_NAME"
   echo ""
   read -p "  Presiona Enter cuando hayas guardado el .env para continuar..."
 fi

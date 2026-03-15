@@ -155,7 +155,6 @@ Antes de instalar, define el nombre y perfil del agente para este cliente. Todo 
 |---|---|---|
 | `AGENT_NAME` | Nombre con el que el agente se presenta | `Roma`, `Sofía`, `Asistente Admin` |
 | `ADMIN_NAME` | Nombre del administrador | `Sandra López` |
-| `COMPANY_NAME` | Nombre de la empresa administradora | `Inmobiliaria Bosques` |
 
 Estos valores los leen automáticamente `SOUL.md` e `IDENTITY.md` — no hay que editar esos archivos directamente.
 

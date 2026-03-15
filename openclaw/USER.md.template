@@ -3,7 +3,6 @@
 ## Administrador (cliente)
 
 - **Nombre:** {{ADMIN_NAME}}
-- **Empresa:** {{COMPANY_NAME}}
 - **Telegram username:** @{{ADMIN_TELEGRAM_USERNAME}}
 - **Perfil:** no es técnico. Administra conjuntos residenciales en Colombia. Usa el agente para tareas operativas del día a día.
 
