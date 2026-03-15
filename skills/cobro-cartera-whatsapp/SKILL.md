@@ -242,7 +242,9 @@ No continúes hasta recibir confirmación explícita del usuario.
 
 ## Paso 7 — Enviar mensajes vía Kapso
 
-El envío usa 3 llamadas a la API de Kapso en secuencia. Variables del `.env` necesarias:
+El envío usa el flujo de broadcasts de Kapso (3 llamadas en secuencia). **No uses ningún otro endpoint** — el único flujo validado es este.
+
+Variables del `.env` necesarias:
 ```
 KAPSO_API_KEY
 KAPSO_PHONE_NUMBER_ID
