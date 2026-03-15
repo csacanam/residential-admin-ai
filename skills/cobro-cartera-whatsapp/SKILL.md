@@ -82,6 +82,18 @@ Lee `./workspace/conjuntos/{slug}/conjunto.json` y verifica que estos campos est
 
 Si falta algún campo obligatorio, detente e indica qué campos hay que completar en `conjunto.json` antes de continuar. No improvises datos faltantes.
 
+### Verificar que el número de WhatsApp está activo en Kapso
+
+Antes de continuar, valida que `KAPSO_PHONE_NUMBER_ID` corresponde a un número activo haciendo:
+
+```
+GET {KAPSO_BASE_URL}/v1/phone-numbers/{KAPSO_PHONE_NUMBER_ID}
+Headers: X-API-Key: {KAPSO_API_KEY}
+```
+
+- Si responde con éxito → continuar.
+- Si responde 404 o error → detener y avisar: "El número de WhatsApp configurado no está disponible en Kapso. Verifica `KAPSO_PHONE_NUMBER_ID` en el archivo de configuración."
+
 ---
 
 ## Paso 2 — Recibir el archivo de cartera
