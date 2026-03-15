@@ -65,7 +65,7 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 openclaw onboard --install-daemon
 
 # 4. Clonar este repositorio dentro del workspace de OpenClaw
-git clone git@github.com:csacanam/residential-admin-ai.git ~/.openclaw/workspace
+git clone https://github.com/csacanam/residential-admin-ai.git ~/.openclaw/workspace
 
 # 5. Crear el archivo de credenciales
 cp ~/.openclaw/workspace/.env.example ~/.openclaw/workspace/.env
