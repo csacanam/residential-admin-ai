@@ -275,9 +275,32 @@ Directorio actualizado.
 
 ---
 
+## Módulo C — Eliminar un conjunto
+
+Se activa cuando el usuario dice: "elimina el conjunto X", "borra La Base", "quita ese conjunto".
+
+### Paso C1 — Confirmar identidad del conjunto
+
+Muestra el nombre completo y el slug del conjunto encontrado y pregunta:
+
+> "¿Confirmas que quieres eliminar **[Nombre del Conjunto]**? Esta acción borrará todos sus datos: configuración, cartera, actas y directorio. No se puede deshacer."
+
+No proceder sin una confirmación explícita ("sí", "confirmo", "elimínalo").
+
+### Paso C2 — Eliminar
+
+Elimina la carpeta completa `./workspace/conjuntos/{slug}/` y todo su contenido.
+
+### Paso C3 — Confirmar
+
+> "Listo. El conjunto **[Nombre]** fue eliminado."
+
+---
+
 ## Restricciones del skill
 
 - No inventar datos del conjunto. Si el usuario no sabe un dato, dejarlo vacío con una nota clara.
 - No modificar `conjunto.json` sin mostrar el resultado final y pedir confirmación.
 - Si el conjunto ya existe y se van a sobrescribir datos, advertirlo antes.
 - El campo `nota_pronto_pago` puede quedar vacío string `""` — es opcional.
+- Nunca eliminar un conjunto sin confirmación explícita del usuario.
