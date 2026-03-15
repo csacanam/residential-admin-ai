@@ -1,0 +1,55 @@
+#!/bin/bash
+# =============================================================
+# pre-push hook — Verificaciones mínimas antes de pushear
+# Instalar con: cp hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+# =============================================================
+
+ERRORS=0
+
+echo "🔍 Verificando antes de pushear..."
+
+# 1. Scripts deben tener bit de ejecución en el índice de git
+for script in scripts/auto-update.sh scripts/install.sh; do
+  mode=$(git ls-files --format='%(objectmode)' "$script" 2>/dev/null)
+  if [ "$mode" != "100755" ]; then
+    echo "  ❌ $script no tiene permiso de ejecución en git (modo: $mode)"
+    echo "     Solución: git update-index --chmod=+x $script"
+    ERRORS=$((ERRORS + 1))
+  else
+    echo "  ✓  $script (+x)"
+  fi
+done
+
+# 2. Archivos obligatorios del workspace existen
+for file in openclaw/AGENTS.md openclaw/SOUL.md openclaw/IDENTITY.md.template openclaw/USER.md.template; do
+  if [ ! -f "$file" ]; then
+    echo "  ❌ Falta archivo obligatorio: $file"
+    ERRORS=$((ERRORS + 1))
+  else
+    echo "  ✓  $file"
+  fi
+done
+
+# 3. .env.example no debe tener valores reales (claves que empiecen con sk- o números largos)
+if grep -qE '=(sk-|[0-9]{10,})' .env.example 2>/dev/null; then
+  echo "  ❌ .env.example parece tener credenciales reales — revísalo"
+  ERRORS=$((ERRORS + 1))
+else
+  echo "  ✓  .env.example sin credenciales reales"
+fi
+
+# 4. .env no debe estar trackeado
+if git ls-files --error-unmatch .env 2>/dev/null; then
+  echo "  ❌ .env está trackeado en git — agrégalo al .gitignore y elimínalo del índice"
+  ERRORS=$((ERRORS + 1))
+fi
+
+echo ""
+
+if [ $ERRORS -gt 0 ]; then
+  echo "  Push bloqueado — $ERRORS problema(s) encontrado(s). Corrígelos y vuelve a intentar."
+  exit 1
+else
+  echo "  Todo OK — pusheando."
+  exit 0
+fi
