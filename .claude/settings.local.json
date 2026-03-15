@@ -19,7 +19,11 @@
       "Bash(git update-index:*)",
       "WebSearch",
       "WebFetch(domain:nwosunneoma.medium.com)",
-      "WebFetch(domain:lumadock.com)"
+      "WebFetch(domain:lumadock.com)",
+      "Bash(python3 -c \":*)",
+      "Bash(pip3 install:*)",
+      "Bash(/opt/homebrew/opt/python@3.11/bin/pip3.11 install:*)",
+      "Bash(/opt/homebrew/opt/python@3.11/bin/python3.11 -c \":*)"
     ]
   }
 }

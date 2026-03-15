@@ -93,22 +93,23 @@ Lee `./workspace/conjuntos/{slug}/conjunto.json` y verifica que estos campos est
 - `pago.tipo_cuenta`
 - `pago.numero_cuenta`
 - `contacto.email`
+- `whatsapp.template_id`
 - `whatsapp.template_cartera`
 - `whatsapp.template_language`
 
 Si falta algún campo obligatorio, detente e indica qué campos hay que completar en `conjunto.json` antes de continuar. No improvises datos faltantes.
 
-### Verificar que el número de WhatsApp está activo en Kapso
+### Verificar que la plantilla existe en Kapso
 
-Antes de continuar, valida que `KAPSO_PHONE_NUMBER_ID` corresponde a un número activo haciendo:
+Antes de continuar, valida que el `template_id` del conjunto existe haciendo:
 
 ```
-GET {KAPSO_BASE_URL}/v1/phone-numbers/{KAPSO_PHONE_NUMBER_ID}
-Headers: X-API-Key: {KAPSO_API_KEY}
+GET https://api.kapso.ai/whatsapp_templates/{whatsapp.template_id}
+Headers: Authorization: Bearer {KAPSO_API_KEY}
 ```
 
 - Si responde con éxito → continuar.
-- Si responde 404 o error → detener y avisar: "El número de WhatsApp configurado no está disponible en Kapso. Verifica `KAPSO_PHONE_NUMBER_ID` en el archivo de configuración."
+- Si responde 404 → detener y avisar: "No encontré la plantilla en Kapso. Verifica que `whatsapp.template_id` en los datos del conjunto sea correcto."
 
 ---
 
@@ -257,25 +258,23 @@ Usa las siguientes variables del archivo `.env`:
 
 ```
 KAPSO_API_KEY
-KAPSO_PHONE_NUMBER_ID
-KAPSO_BASE_URL
+```
+
+Y del `conjunto.json`:
+```
+whatsapp.template_id       ← ID numérico de la plantilla en Kapso
 ```
 
 ### Endpoint
 
 ```
-POST {KAPSO_BASE_URL}/v1/messages
-```
-
-Ejemplo con el valor por defecto:
-```
-POST https://api.kapso.ai/meta/whatsapp/v1/messages
+POST https://api.kapso.ai/whatsapp_templates/{whatsapp.template_id}/send_template
 ```
 
 ### Headers
 
 ```
-X-API-Key: {KAPSO_API_KEY}
+Authorization: Bearer {KAPSO_API_KEY}
 Content-Type: application/json
 ```
 
@@ -283,37 +282,26 @@ Content-Type: application/json
 
 ```json
 {
-  "phoneNumberId": "{KAPSO_PHONE_NUMBER_ID}",
-  "to": "57XXXXXXXXXX",
-  "type": "template",
   "template": {
-    "name": "{whatsapp.template_cartera del conjunto.json}",
-    "language": {
-      "code": "{whatsapp.template_language del conjunto.json}"
-    },
-    "components": [
-      {
-        "type": "body",
-        "parameters": [
-          { "type": "text", "text": "{valor de {{1}}}" },
-          { "type": "text", "text": "{valor de {{2}}}" },
-          { "type": "text", "text": "{valor de {{3}}}" },
-          { "type": "text", "text": "{valor de {{4}}}" },
-          { "type": "text", "text": "{valor de {{5}}}" },
-          { "type": "text", "text": "{valor de {{6}}}" },
-          { "type": "text", "text": "{valor de {{7}}}" },
-          { "type": "text", "text": "{valor de {{8}}}" },
-          { "type": "text", "text": "{valor de {{9}}}" },
-          { "type": "text", "text": "{valor de {{10}}}" },
-          { "type": "text", "text": "{valor de {{11}}}" }
-        ]
-      }
+    "phone_number": "57XXXXXXXXXX",
+    "template_parameters": [
+      "{valor de {{1}}}",
+      "{valor de {{2}}}",
+      "{valor de {{3}}}",
+      "{valor de {{4}}}",
+      "{valor de {{5}}}",
+      "{valor de {{6}}}",
+      "{valor de {{7}}}",
+      "{valor de {{8}}}",
+      "{valor de {{9}}}",
+      "{valor de {{10}}}",
+      "{valor de {{11}}}"
     ]
   }
 }
 ```
 
-**Importante:** los parámetros del array `parameters` deben ir en orden estricto de `{{1}}` a `{{11}}`. El orden importa.
+**Importante:** `template_parameters` es un array posicional en orden estricto de `{{1}}` a `{{11}}`.
 
 ### Manejo de errores
 

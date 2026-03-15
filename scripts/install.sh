@@ -166,7 +166,6 @@ else
   echo "    AGENT_NAME              ← nombre del agente (ej: Roma, Sofía)"
   echo "    OPENAI_API_KEY"
   echo "    KAPSO_API_KEY"
-  echo "    KAPSO_PHONE_NUMBER_ID"
   echo "    AGENT_EMAIL"
   echo "    ADMIN_TELEGRAM_USERNAME"
   echo "    INSTALLER_TELEGRAM_USERNAME"

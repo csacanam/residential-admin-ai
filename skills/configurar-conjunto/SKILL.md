@@ -132,6 +132,7 @@ Solicita o confirma los siguientes datos. Si el conjunto ya existe, muestra los 
 - Correo electrónico (para envío de comprobantes)
 
 **Configuración de WhatsApp:**
+- ID numérico de la plantilla en Kapso (se obtiene en Kapso → Templates → ID de la plantilla aprobada)
 - Nombre de la plantilla aprobada en Meta (ej: `cobro_cartera_v1`)
 - Idioma de la plantilla (por defecto: `es`)
 
@@ -189,6 +190,7 @@ Guarda el archivo en `./workspace/conjuntos/{slug}/conjunto.json` con esta estru
     "nota_pronto_pago": "Si cancela la totalidad de su deuda recuerde que el descuento pronto pago es de $4.000"
   },
   "whatsapp": {
+    "template_id": "123456",
     "template_cartera": "cobro_cartera_v1",
     "template_language": "es"
   },
