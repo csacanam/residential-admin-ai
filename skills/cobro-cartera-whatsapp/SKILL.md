@@ -268,8 +268,10 @@ whatsapp.template_id       ← ID numérico de la plantilla en Kapso
 ### Endpoint
 
 ```
-POST https://api.kapso.ai/whatsapp_templates/{whatsapp.template_id}/send_template
+POST https://api.kapso.ai/whatsapp_templates/{identificador}/send_template
 ```
+
+El `{identificador}` puede ser el nombre de la plantilla (ej: `cobro_cartera`) o su ID numérico. Intenta primero con el nombre. Si responde 404, usa el ID numérico que aparece en Kapso → Templates.
 
 ### Headers
 
