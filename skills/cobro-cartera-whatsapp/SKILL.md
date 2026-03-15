@@ -95,21 +95,9 @@ Lee `./workspace/conjuntos/{slug}/conjunto.json` y verifica que estos campos est
 - `contacto.email`
 - `whatsapp.template_language`
 
-Lee también `KAPSO_TEMPLATE_NAME` del `.env` — es el nombre de la plantilla a usar. Si no está definido, detente y avisa al instalador.
+Lee también del `.env`: `KAPSO_API_KEY`, `KAPSO_PHONE_NUMBER_ID`, `KAPSO_TEMPLATE_ID`, `KAPSO_TEMPLATE_NAME`. Si alguno falta, detente y avisa al instalador.
 
-Si falta algún campo obligatorio, detente e indica qué campos hay que completar en `conjunto.json` antes de continuar. No improvises datos faltantes.
-
-### Verificar que la plantilla existe en Kapso
-
-Antes de continuar, valida que `KAPSO_TEMPLATE_NAME` del `.env` existe en Kapso:
-
-```
-GET https://api.kapso.ai/whatsapp_templates/{KAPSO_TEMPLATE_NAME}
-Headers: Authorization: Bearer {KAPSO_API_KEY}
-```
-
-- Si responde con éxito → continuar.
-- Si responde 404 → detener y avisar al instalador: "No encontré la plantilla `{KAPSO_TEMPLATE_NAME}` en Kapso. Verifica el nombre en el panel de Kapso → Templates y actualiza `KAPSO_TEMPLATE_NAME` en el `.env`."
+Si falta algún campo obligatorio, detente e indica qué campos hay que completar antes de continuar. No improvises datos faltantes.
 
 ---
 
@@ -254,60 +242,88 @@ No continúes hasta recibir confirmación explícita del usuario.
 
 ## Paso 7 — Enviar mensajes vía Kapso
 
-Usa las siguientes variables del archivo `.env`:
-
+El envío usa 3 llamadas a la API de Kapso en secuencia. Variables del `.env` necesarias:
 ```
 KAPSO_API_KEY
+KAPSO_PHONE_NUMBER_ID
+KAPSO_TEMPLATE_ID      ← ID numérico de la plantilla (no el nombre)
+KAPSO_TEMPLATE_NAME    ← nombre (para identificar el broadcast)
 ```
 
-Y del `conjunto.json`:
-```
-whatsapp.template_id       ← ID numérico de la plantilla en Kapso
-```
-
-### Endpoint
-
-```
-POST https://api.kapso.ai/whatsapp_templates/{KAPSO_TEMPLATE_NAME}/send_template
-```
-
-### Headers
-
+Todas las llamadas usan:
 ```
 Authorization: Bearer {KAPSO_API_KEY}
 Content-Type: application/json
 ```
 
-### Body por cada mensaje
+### Paso 7a — Crear el broadcast
 
-```json
+```
+POST https://api.kapso.ai/platform/v1/whatsapp/broadcasts
+Body:
 {
-  "template": {
-    "phone_number": "57XXXXXXXXXX",
-    "template_parameters": [
-      "{valor de {{1}}}",
-      "{valor de {{2}}}",
-      "{valor de {{3}}}",
-      "{valor de {{4}}}",
-      "{valor de {{5}}}",
-      "{valor de {{6}}}",
-      "{valor de {{7}}}",
-      "{valor de {{8}}}",
-      "{valor de {{9}}}",
-      "{valor de {{10}}}",
-      "{valor de {{11}}}"
+  "whatsapp_broadcast": {
+    "name": "{KAPSO_TEMPLATE_NAME}_{slug}_{YYYYMMDD}",
+    "phone_number_id": "{KAPSO_PHONE_NUMBER_ID}",
+    "whatsapp_template_id": "{KAPSO_TEMPLATE_ID}"
+  }
+}
+```
+
+Guarda el `id` del broadcast en la respuesta.
+
+### Paso 7b — Agregar destinatarios
+
+```
+POST https://api.kapso.ai/platform/v1/whatsapp/broadcasts/{broadcast_id}/recipients
+Body:
+{
+  "whatsapp_broadcast": {
+    "recipients": [
+      {
+        "phone_number": "57XXXXXXXXXX",
+        "components": [
+          {
+            "type": "BODY",
+            "parameters": [
+              { "type": "text", "text": "{valor de {{1}}}" },
+              { "type": "text", "text": "{valor de {{2}}}" },
+              { "type": "text", "text": "{valor de {{3}}}" },
+              { "type": "text", "text": "{valor de {{4}}}" },
+              { "type": "text", "text": "{valor de {{5}}}" },
+              { "type": "text", "text": "{valor de {{6}}}" },
+              { "type": "text", "text": "{valor de {{7}}}" },
+              { "type": "text", "text": "{valor de {{8}}}" },
+              { "type": "text", "text": "{valor de {{9}}}" },
+              { "type": "text", "text": "{valor de {{10}}}" },
+              { "type": "text", "text": "{valor de {{11}}}" }
+            ]
+          }
+        ]
+      }
     ]
   }
 }
 ```
 
-**Importante:** `template_parameters` es un array posicional en orden estricto de `{{1}}` a `{{11}}`.
+Incluye todos los destinatarios válidos en una sola llamada.
+
+### Paso 7c — Agendar envío inmediato
+
+```
+POST https://api.kapso.ai/platform/v1/whatsapp/broadcasts/{broadcast_id}/schedule
+Body:
+{
+  "scheduled_at": "{timestamp UTC + 2 minutos, formato ISO 8601}"
+}
+```
+
+Ejemplo: si son las 6:25 PM hora Colombia (UTC-5), usar `2026-03-15T23:27:00Z`.
 
 ### Manejo de errores
 
-- Si la API devuelve error para un contacto individual, regístralo y continúa con el siguiente. No abortes el lote completo.
-- Espera al menos 200ms entre llamadas para no saturar la API.
-- Si la API devuelve error 429 (rate limit), espera 5 segundos y reintenta una vez.
+- Si cualquier paso falla, detente y reporta el error al usuario con el código de respuesta recibido.
+- Si la API devuelve 429, espera 5 segundos y reintenta una vez.
 
 ---
 
