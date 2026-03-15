@@ -43,30 +43,65 @@ for file in AGENTS.md SOUL.md MEMORY.md; do
     echo "[$TIMESTAMP] ERROR: No se pudo copiar $file" >> "$LOG_FILE"
 done
 
-# USER.md e IDENTITY.md se generan desde templates + .env
+# USER.md e IDENTITY.md se generan desde .env con valores reales
 ENV_FILE="$REPO_DIR/.env"
 if [ -f "$ENV_FILE" ]; then
-  # Cargar variables del .env
-  set -a; source "$ENV_FILE"; set +a
+  # Leer valores del .env de forma segura (soporta espacios, tildes, caracteres especiales)
+  get_val() { grep "^$1=" "$ENV_FILE" | head -1 | cut -d'=' -f2- | tr -d '\r'; }
+
+  AGENT_NAME=$(get_val AGENT_NAME)
+  ADMIN_NAME=$(get_val ADMIN_NAME)
+  COMPANY_NAME=$(get_val COMPANY_NAME)
+  ADMIN_TG=$(get_val ADMIN_TELEGRAM_USERNAME)
+  INSTALLER_TG=$(get_val INSTALLER_TELEGRAM_USERNAME)
 
   # Generar USER.md
-  sed \
-    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
-    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
-    -e "s/{{ADMIN_TELEGRAM_USERNAME}}/${ADMIN_TELEGRAM_USERNAME:-[ADMIN_TELEGRAM_USERNAME]}/g" \
-    -e "s/{{INSTALLER_TELEGRAM_USERNAME}}/${INSTALLER_TELEGRAM_USERNAME:-[INSTALLER_TELEGRAM_USERNAME]}/g" \
-    "$REPO_DIR/openclaw/USER.md.template" > "$WORKSPACE_DIR/USER.md" && \
-    echo "[$TIMESTAMP] USER.md generado." >> "$LOG_FILE" || \
-    echo "[$TIMESTAMP] ERROR: No se pudo generar USER.md" >> "$LOG_FILE"
+  cat > "$WORKSPACE_DIR/USER.md" << EOF
+# Perfiles de usuario
+
+## Administrador (cliente)
+
+- **Nombre:** ${ADMIN_NAME:-[pendiente]}
+- **Empresa:** ${COMPANY_NAME:-[pendiente]}
+- **Telegram username:** @${ADMIN_TG:-[pendiente]}
+- **Perfil:** no es técnico. Administra conjuntos residenciales en Colombia. Usa el agente para tareas operativas del día a día.
+
+## Instalador
+
+- **Telegram username:** @${INSTALLER_TG:-[pendiente]}
+- **Perfil:** técnico. Configura y mantiene el agente. Tiene acceso completo en modo instalador.
+
+## Regla de identificación
+
+Cuando llegue un mensaje, compara el username de Telegram del remitente con los registrados arriba:
+
+- Si es **@${INSTALLER_TG:-[pendiente]}** → modo instalador
+- Si es **@${ADMIN_TG:-[pendiente]}** → modo administrador
+- Cualquier otro username → silencio total, no respondas nada
+EOF
+  echo "[$TIMESTAMP] USER.md generado." >> "$LOG_FILE"
 
   # Generar IDENTITY.md
-  sed \
-    -e "s/{{AGENT_NAME}}/${AGENT_NAME:-Asistente}/g" \
-    -e "s/{{ADMIN_NAME}}/${ADMIN_NAME:-[ADMIN_NAME]}/g" \
-    -e "s/{{COMPANY_NAME}}/${COMPANY_NAME:-[COMPANY_NAME]}/g" \
-    "$REPO_DIR/openclaw/IDENTITY.md.template" > "$WORKSPACE_DIR/IDENTITY.md" && \
-    echo "[$TIMESTAMP] IDENTITY.md generado." >> "$LOG_FILE" || \
-    echo "[$TIMESTAMP] ERROR: No se pudo generar IDENTITY.md" >> "$LOG_FILE"
+  cat > "$WORKSPACE_DIR/IDENTITY.md" << EOF
+# Identidad del agente
+
+## Nombre
+
+Tu nombre es **${AGENT_NAME:-Asistente}**.
+
+## Rol
+
+Asistente de administración de conjuntos residenciales para **${COMPANY_NAME:-[pendiente]}**.
+
+## Cómo presentarte
+
+Si es el primer mensaje de una sesión con el administrador, saluda brevemente:
+
+> "Hola ${ADMIN_NAME:-[pendiente]}, soy ${AGENT_NAME:-Asistente}. ¿En qué te ayudo hoy?"
+
+No te presentes en cada mensaje — solo al inicio si es natural hacerlo.
+EOF
+  echo "[$TIMESTAMP] IDENTITY.md generado." >> "$LOG_FILE"
 else
   echo "[$TIMESTAMP] ADVERTENCIA: .env no encontrado — USER.md e IDENTITY.md no generados." >> "$LOG_FILE"
 fi
