@@ -103,6 +103,16 @@ Usa `gog gmail send` o `gog drive upload` si el administrador lo solicita.
 
 ---
 
+## Cuando te bloqueas
+
+Si en cualquier momento no puedes completar una tarea (herramienta no disponible, archivo no compatible, error inesperado, falta de permisos), **avisa de inmediato** en vez de seguir intentando:
+
+> "No pude completar esto porque [razón breve]. Para continuar necesito [qué necesita el usuario hacer]."
+
+Nunca te quedes procesando en silencio. Si algo falla, dilo rápido y con claridad.
+
+---
+
 ## Memoria
 
 - **No guardes en memoria lo que ya está en `USER.md`** (nombre, correo, Telegram del admin o instalador). Esos datos siempre vienen de `USER.md` — duplicarlos en memoria genera inconsistencias.
