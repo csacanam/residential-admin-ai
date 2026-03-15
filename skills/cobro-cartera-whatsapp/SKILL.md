@@ -93,23 +93,23 @@ Lee `./workspace/conjuntos/{slug}/conjunto.json` y verifica que estos campos est
 - `pago.tipo_cuenta`
 - `pago.numero_cuenta`
 - `contacto.email`
-- `whatsapp.template_id`
-- `whatsapp.template_cartera`
 - `whatsapp.template_language`
+
+Lee también `KAPSO_TEMPLATE_NAME` del `.env` — es el nombre de la plantilla a usar. Si no está definido, detente y avisa al instalador.
 
 Si falta algún campo obligatorio, detente e indica qué campos hay que completar en `conjunto.json` antes de continuar. No improvises datos faltantes.
 
 ### Verificar que la plantilla existe en Kapso
 
-Antes de continuar, valida que el `template_id` del conjunto existe haciendo:
+Antes de continuar, valida que `KAPSO_TEMPLATE_NAME` del `.env` existe en Kapso:
 
 ```
-GET https://api.kapso.ai/whatsapp_templates/{whatsapp.template_id}
+GET https://api.kapso.ai/whatsapp_templates/{KAPSO_TEMPLATE_NAME}
 Headers: Authorization: Bearer {KAPSO_API_KEY}
 ```
 
 - Si responde con éxito → continuar.
-- Si responde 404 → detener y avisar: "No encontré la plantilla en Kapso. Verifica que `whatsapp.template_id` en los datos del conjunto sea correcto."
+- Si responde 404 → detener y avisar al instalador: "No encontré la plantilla `{KAPSO_TEMPLATE_NAME}` en Kapso. Verifica el nombre en el panel de Kapso → Templates y actualiza `KAPSO_TEMPLATE_NAME` en el `.env`."
 
 ---
 
@@ -268,10 +268,8 @@ whatsapp.template_id       ← ID numérico de la plantilla en Kapso
 ### Endpoint
 
 ```
-POST https://api.kapso.ai/whatsapp_templates/{identificador}/send_template
+POST https://api.kapso.ai/whatsapp_templates/{KAPSO_TEMPLATE_NAME}/send_template
 ```
-
-El `{identificador}` puede ser el nombre de la plantilla (ej: `cobro_cartera`) o su ID numérico. Intenta primero con el nombre. Si responde 404, usa el ID numérico que aparece en Kapso → Templates.
 
 ### Headers
 
