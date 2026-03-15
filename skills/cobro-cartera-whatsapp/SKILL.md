@@ -63,6 +63,22 @@ Le agradecemos la atención por el pago oportuno. Recuerde que los gastos e inve
 
 ---
 
+## Paso 0 — Verificar herramientas disponibles
+
+Antes de hacer cualquier cosa, verifica que las herramientas necesarias están instaladas:
+
+```bash
+command -v rg && command -v python3
+```
+
+Si alguna falla, avisa de inmediato y detente:
+
+> "Faltan herramientas necesarias para este skill ([lista las que faltan]). El instalador debe correr: `sudo apt-get install -y ripgrep python3`"
+
+No intentes alternativas. No sigas adelante.
+
+---
+
 ## Paso 1 — Resolver conjunto activo
 
 Antes de cualquier acción, aplica la regla de contexto por conjunto definida en `CLAUDE.md`.
