@@ -7,7 +7,7 @@
 
 REPO_DIR="$HOME/residential-admin-ai"
 SKILLS_SRC="$REPO_DIR/skills"
-SKILLS_DST="$HOME/.agents/skills"
+SKILLS_DST="$HOME/.openclaw/skills"
 WORKSPACE_DIR="$HOME/.openclaw/workspace"
 LOG_DIR="$REPO_DIR/logs"
 LOG_FILE="$LOG_DIR/auto-update.log"

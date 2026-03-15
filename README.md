@@ -65,12 +65,11 @@ openclaw onboard --install-daemon
 # 3. Clonar este repositorio en una carpeta propia (NO dentro del workspace)
 git clone https://github.com/csacanam/residential-admin-ai.git ~/residential-admin-ai
 
-# 4. Enlazar los skills al directorio correcto de OpenClaw (~/.agents/skills)
-#    No se reemplaza el directorio completo — se enlaza cada skill individualmente
-#    para no borrar skills existentes que OpenClaw pueda tener instalados
-ln -s ~/residential-admin-ai/skills/actas-reunion ~/.agents/skills/actas-reunion
-ln -s ~/residential-admin-ai/skills/cobro-cartera-whatsapp ~/.agents/skills/cobro-cartera-whatsapp
-ln -s ~/residential-admin-ai/skills/configurar-conjunto ~/.agents/skills/configurar-conjunto
+# 4. Enlazar los skills al directorio de OpenClaw (~/.openclaw/skills)
+#    Se enlaza cada skill individualmente para no afectar otros skills instalados
+ln -s ~/residential-admin-ai/skills/actas-reunion ~/.openclaw/skills/actas-reunion
+ln -s ~/residential-admin-ai/skills/cobro-cartera-whatsapp ~/.openclaw/skills/cobro-cartera-whatsapp
+ln -s ~/residential-admin-ai/skills/configurar-conjunto ~/.openclaw/skills/configurar-conjunto
 
 # 5. Copiar CLAUDE.md al workspace de OpenClaw
 cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
