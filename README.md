@@ -57,21 +57,28 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 #    El instalador maneja Node.js automáticamente
 curl -fsSL https://openclaw.ai/install.sh | bash
 
-# 3. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
+# 2. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
 #    El asistente interactivo configura el workspace, el modelo y los canales
 openclaw onboard --install-daemon
 
-# 4. Clonar este repositorio dentro del workspace de OpenClaw
-git clone https://github.com/csacanam/residential-admin-ai.git ~/.openclaw/workspace
+# 3. Clonar este repositorio en una carpeta propia (NO dentro del workspace)
+git clone https://github.com/csacanam/residential-admin-ai.git ~/residential-admin-ai
 
-# 5. Crear el archivo de credenciales
-cp ~/.openclaw/workspace/.env.example ~/.openclaw/workspace/.env
+# 4. Enlazar los skills al directorio de skills de OpenClaw
+#    OpenClaw carga skills desde ~/.openclaw/skills/ automáticamente
+ln -s ~/residential-admin-ai/skills ~/.openclaw/skills
 
-# 6. Llenar .env con las credenciales del cliente:
+# 5. Copiar CLAUDE.md al workspace de OpenClaw
+cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
+
+# 6. Crear el archivo de credenciales
+cp ~/residential-admin-ai/.env.example ~/residential-admin-ai/.env
+
+# 7. Llenar .env con las credenciales del cliente:
 #    OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
 #    AGENT_EMAIL, ADMIN_EMAIL
 
-# 7. Arrancar el gateway
+# 8. Arrancar el gateway
 openclaw gateway --port 18789
 ```
 
@@ -111,8 +118,9 @@ El agente guiará el proceso para registrar cada conjunto (nombre, NIT, banco, c
 Cuando publiques mejoras de skills o plantillas, en el computador del cliente:
 
 ```bash
-cd ~/.openclaw/workspace
+cd ~/residential-admin-ai
 git pull origin main
+cp CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
 ```
 
-Los datos del cliente en `workspace/conjuntos/` son locales y nunca se ven afectados.
+Los skills se actualizan solos porque `~/.openclaw/skills` es un enlace directo a la carpeta del repo. Solo hay que copiar CLAUDE.md si cambió.
