@@ -58,46 +58,24 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 curl -fsSL https://openclaw.ai/install.sh | bash
 
 # 2. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
-#    El asistente interactivo configura el workspace, el modelo y los canales
-#    ANTES de correr esto: tener a la mano el token del bot de Telegram (ver docs/setup-inicial.md Paso 5)
+#    ANTES: tener a la mano el token del bot de Telegram (ver docs/setup-inicial.md Paso 5)
 openclaw onboard --install-daemon
 
-# 3. Clonar este repositorio en una carpeta propia (NO dentro del workspace)
-git clone https://github.com/csacanam/residential-admin-ai.git ~/residential-admin-ai
-
-# 4. Enlazar los skills al directorio de OpenClaw (~/.openclaw/skills)
-#    Se enlaza cada skill individualmente para no afectar otros skills instalados
-ln -s ~/residential-admin-ai/skills/actas-reunion ~/.openclaw/skills/actas-reunion
-ln -s ~/residential-admin-ai/skills/cobro-cartera-whatsapp ~/.openclaw/skills/cobro-cartera-whatsapp
-ln -s ~/residential-admin-ai/skills/configurar-conjunto ~/.openclaw/skills/configurar-conjunto
-
-# 5. Copiar CLAUDE.md al workspace de OpenClaw
-cp ~/residential-admin-ai/CLAUDE.md ~/.openclaw/workspace/CLAUDE.md
-
-# 6. Crear y editar el archivo de credenciales
-cp ~/residential-admin-ai/.env.example ~/residential-admin-ai/.env
-nano ~/residential-admin-ai/.env
-#    Llena los 3 campos vacíos: OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID
-#    Para guardar: Ctrl+O → Enter → Ctrl+X
-
-# 7. Activar la actualización automática de skills (cron diario a las 3am)
-(crontab -l 2>/dev/null; echo "0 3 * * * $HOME/residential-admin-ai/scripts/auto-update.sh") | crontab -
-
-# 8. Arrancar el gateway
-openclaw gateway --port 18789
+# 3. Correr el script de instalación — hace todo lo demás automáticamente
+curl -fsSL https://raw.githubusercontent.com/csacanam/residential-admin-ai/main/scripts/install.sh | bash
 ```
 
-El dashboard queda disponible en `http://127.0.0.1:18789/`
+El script clona el repo, enlaza los skills, copia CLAUDE.md, crea el .env y registra el cron. Te pedirá que completes el .env con las credenciales antes de continuar.
 
 ### Primer uso — registrar los conjuntos del cliente
 
-Con OpenClaw corriendo, ejecutar en el chat del agente:
+Con OpenClaw corriendo, ejecutar en el chat del agente (Telegram):
 
 ```
 /configurar-conjunto
 ```
 
-El agente guiará el proceso para registrar cada conjunto (nombre, NIT, banco, cuenta, email, directorio de apartamentos). Repetir para cada conjunto que maneja el administrador.
+El agente guiará el proceso para registrar cada conjunto. Repetir para cada conjunto que maneja el administrador.
 
 ### Prueba antes de entregar
 
