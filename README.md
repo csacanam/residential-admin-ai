@@ -72,7 +72,11 @@ mkdir credentials
 # copiar google-service-account.json a credentials/
 
 # 6. Abrir OpenClaw apuntando a esta carpeta
-openclaw ~/residential-admin-ai
+#    NO clonas dentro de OpenClaw — abres OpenClaw dentro de la carpeta clonada.
+#    OpenClaw leerá CLAUDE.md y skills/ desde ahí.
+cd ~/residential-admin-ai
+openclaw .
+#    (si OpenClaw acepta ruta como argumento: openclaw ~/residential-admin-ai)
 ```
 
 OpenClaw leerá `CLAUDE.md` automáticamente y el agente estará listo con su identidad y reglas.
