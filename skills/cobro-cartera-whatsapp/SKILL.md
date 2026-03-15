@@ -123,7 +123,7 @@ El archivo debe tener estas columnas mínimas (los nombres pueden variar, intent
 
 | Columna esperada | Nombres alternativos aceptados | Obligatoria |
 |---|---|---|
-| `nombre` | residente, propietario, titular | Sí |
+| `nombre` | residente, propietario, titular | No (solo para logs internos, no se usa en la plantilla) |
 | `apartamento` | apto, unidad, inmueble, referencia | Sí |
 | `telefono` | celular, whatsapp, phone | Sí |
 | `saldo` | deuda, valor, monto, total | Sí |
