@@ -27,3 +27,13 @@
 ## Para agregar un skill nuevo
 
 Ver `docs/arquitectura-agente.md`.
+
+## Setup en una máquina nueva
+
+Después de clonar el repo, instala el hook de pre-push:
+
+```bash
+cp hooks/pre-push .git/hooks/pre-push
+```
+
+Esto bloquea pushes que pierdan el bit de ejecución en los scripts u otros problemas básicos.
