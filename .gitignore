@@ -1,0 +1,18 @@
+# Credenciales — NUNCA subir al repo
+.env
+*.env.local
+credentials/
+
+# Workspace local — se crea en cada instalación, nunca va al repo
+workspace/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Node (si se usan scripts)
+node_modules/
+npm-debug.log*
+
+# Logs locales
+*.log

@@ -1,0 +1,39 @@
+{
+  "name": "Bosques del Norte",
+  "slug": "bosques-del-norte",
+  "aliases": ["bosques", "bdn", "bosques del norte"],
+  "city": "Cali",
+  "address": "Calle 62 # 12B - 140, Cali",
+
+  "categoria": "Residencial",
+  "tono": "formal_amable",
+  "currency": "COP",
+
+  "contacto": {
+    "administradora": "Sandra López",
+    "telefono_admin": "3001234567",
+    "email_conjunto": "administracion@bosquesdelnorte.com",
+    "email_admin": "sandralopez@gmail.com",
+    "porteria": ""
+  },
+
+  "pago": {
+    "nit": "805003068-4",
+    "banco": "AV Villas",
+    "tipo_cuenta": "Corriente",
+    "numero_cuenta": "177-019265",
+    "nota_pronto_pago": "Si cancela la totalidad de su deuda recuerde que el descuento pronto pago es de $4.000"
+  },
+
+  "whatsapp": {
+    "template_cartera": "cobro_cartera_v1",
+    "template_language": "es"
+  },
+
+  "policies": {
+    "allowMassWhatsapp": true,
+    "requirePreviewBeforeSend": true
+  },
+
+  "notes": "Conjunto de 4 bloques, 120 unidades. La referencia de pago es el número de apartamento."
+}
