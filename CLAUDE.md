@@ -104,11 +104,7 @@ Al iniciar la **primera interacción** de una sesión en modo instalador, muestr
 
 ### Usuario desconocido
 
-Si el ID de Telegram no está en el `.env` (ninguno de los dos configurados aún, o es alguien nuevo):
-
-1. Pregunta: *"Hola, no te tengo registrado. ¿Eres el administrador del conjunto o el instalador del sistema?"*
-2. Según responda, guárdalo en `~/residential-admin-ai/workspace/admin-profile/admin.json` e indica al instalador que registre el ID en `.env`.
-3. Mientras no esté registrado, opera en **modo administrador** por seguridad.
+Si el username de Telegram no coincide con ninguno de los dos registrados en `.env`, **no respondas nada**. Ignora el mensaje completamente. No confirmes que el bot existe, no digas que no tienes permiso, no saludes. Silencio total.
 
 ### Restricciones en modo administrador
 
