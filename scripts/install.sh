@@ -19,7 +19,18 @@ echo ""
 # -------------------------------------------------------------
 # 1. Clonar el repositorio
 # -------------------------------------------------------------
-echo "[1/5] Clonando repositorio..."
+echo "[1/6] Instalando dependencias del sistema..."
+
+sudo apt-get update -qq
+sudo apt-get install -y ripgrep python3 python3-pip 2>&1 | grep -E "^(Get|Inst|Err|W:)" || true
+pip3 install openpyxl --quiet 2>/dev/null || pip3 install openpyxl --quiet --break-system-packages 2>/dev/null || true
+echo "  OK"
+echo ""
+
+# -------------------------------------------------------------
+# 2. Clonar el repositorio
+# -------------------------------------------------------------
+echo "[2/6] Clonando repositorio..."
 
 if [ -d "$REPO_DIR" ]; then
   echo "  Ya existe $REPO_DIR — actualizando en vez de clonar."
@@ -37,7 +48,7 @@ echo ""
 # -------------------------------------------------------------
 # 2. Enlazar skills a OpenClaw
 # -------------------------------------------------------------
-echo "[2/5] Enlazando skills..."
+echo "[3/6] Enlazando skills..."
 
 for skill_dir in "$REPO_DIR/skills"/*/; do
   skill_name=$(basename "$skill_dir")
@@ -56,7 +67,7 @@ echo ""
 # -------------------------------------------------------------
 # 3. Copiar archivos de instrucciones al workspace de OpenClaw
 # -------------------------------------------------------------
-echo "[3/5] Copiando instrucciones al workspace de OpenClaw..."
+echo "[4/6] Copiando instrucciones al workspace de OpenClaw..."
 
 OK=true
 
@@ -141,7 +152,7 @@ echo ""
 # -------------------------------------------------------------
 # 4. Crear archivo .env
 # -------------------------------------------------------------
-echo "[4/5] Configurando credenciales (.env)..."
+echo "[5/6] Configurando credenciales (.env)..."
 
 if [ -f "$REPO_DIR/.env" ]; then
   echo "  Ya existe .env — no se sobreescribe."
@@ -169,7 +180,7 @@ echo ""
 # -------------------------------------------------------------
 # 5. Registrar cron de actualización automática (3am diario)
 # -------------------------------------------------------------
-echo "[5/5] Registrando actualización automática..."
+echo "[6/6] Registrando actualización automática..."
 
 CRON_CMD="0 3 * * * $REPO_DIR/scripts/auto-update.sh"
 
