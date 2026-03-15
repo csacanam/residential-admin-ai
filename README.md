@@ -48,49 +48,48 @@ Antes de ir al computador del cliente necesitas tener creadas y funcionando esta
 
 - Cuenta de OpenAI con API key y créditos cargados
 - Cuenta de Kapso con API key, número WhatsApp conectado y plantilla aprobada
-- Cuenta de Google dedicada para el agente (Gmail + Drive)
+- Cuenta de Google dedicada para el agente (Gmail)
 
 ### Instalación en el computador del cliente
 
 ```bash
-# 1. Instalar Node.js 24 (requerido por OpenClaw)
-#    https://nodejs.org
-
-# 2. Instalar OpenClaw
+# 1. Instalar OpenClaw
+#    El instalador maneja Node.js automáticamente
 curl -fsSL https://openclaw.ai/install.sh | bash
-# alternativa: npm install -g openclaw@latest
 
-# 3. Clonar este repositorio
-git clone git@github.com:csacanam/residential-admin-ai.git ~/residential-admin-ai
-cd ~/residential-admin-ai
+# 2. Correr el onboarding inicial de OpenClaw (solo una vez por computador)
+#    El asistente interactivo configura el workspace, el modelo y los canales
+openclaw onboard --install-daemon
+
+# 3. Clonar este repositorio dentro del workspace de OpenClaw
+git clone git@github.com:csacanam/residential-admin-ai.git ~/.openclaw/workspace
 
 # 4. Crear el archivo de credenciales
-cp .env.example .env
+cp ~/.openclaw/workspace/.env.example ~/.openclaw/workspace/.env
 
 # 5. Llenar .env con las credenciales del cliente:
 #    OPENAI_API_KEY, KAPSO_API_KEY, KAPSO_PHONE_NUMBER_ID,
-#    AGENT_EMAIL, ADMIN_EMAIL, GOOGLE_CREDENTIALS_JSON, GMAIL_APP_PASSWORD
+#    AGENT_EMAIL, ADMIN_EMAIL
 
-# 6. Copiar el JSON de OAuth de Google al lugar correcto
-mkdir credentials
-# copiar google-oauth-credentials.json a credentials/
-
-# 7. Hacer el onboarding inicial de OpenClaw (solo una vez por computador)
-openclaw onboard --install-daemon
-
-# 8. Conectar los canales del agente
-openclaw channels login
-
-# 9. Arrancar el gateway de OpenClaw
+# 6. Arrancar el gateway
 openclaw gateway --port 18789
-# El dashboard queda disponible en http://127.0.0.1:18789/
 ```
 
-> **Nota:** la integración exacta entre OpenClaw y la carpeta del proyecto (dónde apunta para leer `CLAUDE.md` y `skills/`) debe verificarse en [docs.openclaw.ai](https://docs.openclaw.ai) durante la instalación. El repositorio está estructurado siguiendo las convenciones estándar de Claude Code en que OpenClaw está basado.
+El dashboard queda disponible en `http://127.0.0.1:18789/`
+
+### Configurar el skill de Google Workspace (GOG)
+
+La integración con Google Drive y Gmail se hace a través del skill GOG de OpenClaw. Configurarlo desde el dashboard o con:
+
+```bash
+openclaw channels login
+```
+
+Ver instrucciones detalladas en [docs/setup-inicial.md](docs/setup-inicial.md) → Paso 4.
 
 ### Primer uso — registrar los conjuntos del cliente
 
-Con OpenClaw abierto, ejecutar:
+Con OpenClaw corriendo, ejecutar en el chat del agente:
 
 ```
 /configurar-conjunto
@@ -103,17 +102,17 @@ El agente guiará el proceso para registrar cada conjunto (nombre, NIT, banco, c
 1. Generar un acta de prueba con la transcripción de ejemplo en `examples/`.
 2. Procesar la cartera de ejemplo en `examples/cartera-ejemplo.csv`.
 3. Verificar que el acta llegue al correo del administrador.
-4. Verificar que el resumen de cartera muestre preview correcto (sin hacer envío real).
+4. Verificar que el resumen de cartera muestre preview correcto (sin confirmar el envío).
 
 ---
 
 ## Actualizaciones
 
-Cuando publiques mejoras de skills o plantillas, el cliente solo necesita:
+Cuando publiques mejoras de skills o plantillas, en el computador del cliente:
 
 ```bash
-cd ~/residential-admin-ai
+cd ~/.openclaw/workspace
 git pull origin main
 ```
 
-Los datos del cliente en `workspace/` son locales y nunca se ven afectados.
+Los datos del cliente en `workspace/conjuntos/` son locales y nunca se ven afectados.

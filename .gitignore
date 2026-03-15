@@ -1,7 +1,6 @@
 # Credenciales — NUNCA subir al repo
 .env
 *.env.local
-credentials/
 
 # Workspace local — se crea en cada instalación, nunca va al repo
 workspace/

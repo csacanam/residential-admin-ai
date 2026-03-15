@@ -100,46 +100,31 @@ Una vez aprobada, el nombre `cobro_cartera_v1` se registra en `conjunto.json` de
 
 ---
 
-## Paso 4 — Crear la cuenta de Google del agente
+## Paso 4 — Configurar Google Workspace del agente (skill GOG)
 
-El agente necesita su propio correo de Google — separado del correo personal del administrador — para enviar documentos y recibir archivos.
+El agente necesita su propio correo de Google para enviar documentos al administrador y recibir archivos. La integración se hace a través del **skill GOG de OpenClaw**, que maneja Google Drive y Gmail internamente — no se configuran credenciales manuales en `.env`.
 
 ### Crear el correo del agente
 
 1. Crear una cuenta de Gmail nueva. Ejemplo: `agente.nombreconjunto@gmail.com`.
-2. No usar el correo personal del administrador para esto.
+2. **No usar el correo personal del administrador** — debe ser una cuenta separada y dedicada al agente.
 
-### Configurar acceso a Google Drive y Gmail
+### Conectar Google en OpenClaw
 
-> **Nota técnica:** Google tiene dos tipos de credenciales. Las **cuentas de servicio** sirven para Google Drive (subir y compartir archivos). Para **enviar correos desde Gmail** se necesita OAuth2 o una contraseña de aplicación — las cuentas de servicio no funcionan con Gmail personal. Este setup cubre ambos casos.
+1. Con OpenClaw corriendo, ejecutar:
+   ```bash
+   openclaw channels login
+   ```
+2. Seleccionar **Google Workspace / GOG** en el asistente de canales.
+3. Iniciar sesión con la cuenta del agente recién creada y autorizar los permisos de Drive y Gmail.
+4. La autorización se guarda en OpenClaw y no es necesario repetirla.
 
-#### Parte A — Credenciales OAuth2 para Google Drive y Gmail
+### Registrar los correos en `.env`
 
-1. Ir a [console.cloud.google.com](https://console.cloud.google.com) con la cuenta del agente.
-2. Crear un proyecto nuevo. Nombre sugerido: `residential-admin-ai`.
-3. Activar las APIs:
-   - **Google Drive API**
-   - **Gmail API**
-4. Ir a **Credenciales → Crear credencial → ID de cliente de OAuth**.
-   - Tipo de aplicación: **Aplicación de escritorio**
-   - Nombre: `residential-admin-ai`
-5. Descargar el archivo JSON de credenciales.
-6. En el computador del cliente, copiar ese archivo a `credentials/google-oauth-credentials.json`.
-7. La primera vez que el agente use Google, se abrirá una ventana del navegador pidiendo autorización con la cuenta del agente. Autorizarla. Esto solo ocurre una vez.
+Aunque la autenticación la maneja GOG, el agente necesita saber a quién enviarle los documentos:
 
-#### Parte B — Contraseña de aplicación para envío de Gmail
-
-1. Con la cuenta del agente, ir a [myaccount.google.com/security](https://myaccount.google.com/security).
-2. Activar la **verificación en dos pasos** si no está activa.
-3. Ir a **Contraseñas de aplicaciones**.
-4. Crear una nueva contraseña. Nombre sugerido: `residential-admin-ai`.
-5. Copiar la contraseña de 16 caracteres generada.
-
-**Estas credenciales van en `.env` como:**
-- `AGENT_EMAIL` ← el Gmail recién creado
+- `AGENT_EMAIL` ← el Gmail del agente recién creado
 - `ADMIN_EMAIL` ← el correo personal del administrador (donde recibirá documentos)
-- `GOOGLE_CREDENTIALS_JSON` ← `./credentials/google-oauth-credentials.json`
-- `GMAIL_APP_PASSWORD` ← la contraseña de aplicación de 16 caracteres
 
 ---
 
@@ -161,8 +146,7 @@ El agente necesita su propio correo de Google — separado del correo personal d
 - [ ] `KAPSO_API_KEY` y `KAPSO_PHONE_NUMBER_ID` en `.env`
 - [ ] Plantilla `cobro_cartera_v1` creada en Kapso y aprobada por Meta
 - [ ] Gmail del agente creado (no el personal del administrador)
-- [ ] JSON de OAuth2 de Google en `credentials/` y ruta en `.env`
-- [ ] Contraseña de aplicación de Gmail generada y en `.env` como `GMAIL_APP_PASSWORD`
+- [ ] Google Workspace conectado en OpenClaw via skill GOG (`openclaw channels login`)
 - [ ] `AGENT_EMAIL` y `ADMIN_EMAIL` en `.env`
 - [ ] `/configurar-conjunto` ejecutado para cada conjunto del administrador
 - [ ] Prueba de acta con transcripción de ejemplo completada
