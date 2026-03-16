@@ -316,11 +316,11 @@ Incluye todos los destinatarios válidos en una sola llamada.
 POST https://api.kapso.ai/platform/v1/whatsapp/broadcasts/{broadcast_id}/schedule
 Body:
 {
-  "scheduled_at": "{timestamp UTC + 2 minutos, formato ISO 8601}"
+  "scheduled_at": "{timestamp UTC + 1 minuto, formato ISO 8601}"
 }
 ```
 
-Ejemplo: si son las 6:25 PM hora Colombia (UTC-5), usar `2026-03-15T23:27:00Z`.
+Usa exactamente 1 minuto en el futuro — es el mínimo que acepta Kapso para envío inmediato.
 
 ### Manejo de errores
 
@@ -329,48 +329,63 @@ Ejemplo: si son las 6:25 PM hora Colombia (UTC-5), usar `2026-03-15T23:27:00Z`.
 
 ---
 
-## Paso 8 — Registrar log de resultados
+## Paso 8 — Monitorear resultado del broadcast
 
-Guarda el resultado en:
+Espera 2 minutos y consulta el estado:
+
+```
+GET https://api.kapso.ai/platform/v1/whatsapp/broadcasts/{broadcast_id}
+Headers: Authorization: Bearer {KAPSO_API_KEY}
+```
+
+Repite cada 30 segundos hasta que el estado sea `completed` o `failed` (máximo 5 intentos). Si no completa en ese tiempo, avisa al usuario que el envío sigue en cola y quedó registrado.
+
+---
+
+## Paso 9 — Crear Google Sheets con resultados y compartir
+
+Una vez que el broadcast completó, crea un Google Sheets con GOG con el resultado de cada destinatario:
+
+```bash
+gog sheets create "Cobro cartera {slug} {YYYY-MM-DD}" --account {AGENT_EMAIL}
+```
+
+El Sheets debe tener estas columnas:
+
+| Apartamento | Teléfono | Saldo | Estado | Detalle |
+|---|---|---|---|---|
+| 101 | 573001234567 | $1.200.000 | Entregado | — |
+| 205 | INVÁLIDO | $850.000 | Excluido | Teléfono inválido |
+
+Compártelo públicamente con permiso de lectura:
+
+```bash
+gog sheets share {spreadsheet_id} --anyone --role reader
+```
+
+Guarda el link público.
+
+---
+
+## Paso 10 — Registrar log y mostrar resumen final
+
+Guarda el log en:
 ```
 ./workspace/conjuntos/{slug}/cartera/sent/envio-{YYYY-MM-DD-HHMM}.json
 ```
 
-```json
-{
-  "fecha": "2026-03-15T10:35:00-05:00",
-  "conjunto": "bosques-del-norte",
-  "template": "cobro_cartera_v1",
-  "archivo_origen": "cartera-marzo-2026.csv",
-  "total_en_archivo": 18,
-  "enviados_ok": 16,
-  "fallidos": 1,
-  "excluidos_telefono_invalido": 1,
-  "detalle": [
-    { "nombre": "Carlos Pérez", "apartamento": "101", "telefono": "573001234567", "estado": "ok" },
-    { "nombre": "María López", "apartamento": "205", "telefono": "INVÁLIDO", "estado": "excluido" },
-    { "nombre": "Jorge Ríos", "apartamento": "312", "telefono": "573154567890", "estado": "error_api", "error": "número no registrado en WhatsApp" }
-  ]
-}
-```
+Mueve el archivo original de `cartera/input/` a `cartera/processed/` con la fecha en el nombre.
 
-Mueve el archivo original de `cartera/input/` a `cartera/processed/` con la fecha en el nombre:
-```
-cartera-marzo-2026_procesado-2026-03-15.csv
-```
-
----
-
-## Paso 9 — Mostrar resumen final
+Envía este resumen al usuario:
 
 ```
-Envío completado.
-- Conjunto: Bosques del Norte
-- Enviados exitosamente: 16
-- Fallidos (error API): 1
-- Excluidos (teléfono inválido): 1
-- Archivo movido a: cartera/processed/
-- Log guardado en: [ruta completa del archivo]
+Cobro enviado. Aquí el resultado:
+
+✅ Enviados: 16
+❌ Fallidos: 1
+⏭ Excluidos (teléfono inválido): 1
+
+📊 Resultado completo: [link al Google Sheets]
 ```
 
 ---

@@ -99,19 +99,32 @@ Ejemplo:
 
 Si ya existe un archivo con ese nombre, agrega un sufijo `-v2`, `-v3`, etc.
 
-## Paso 8 — Confirmar y mostrar ruta del archivo
+## Paso 8 — Crear Google Doc y compartir
 
-Muestra el resumen en el chat:
+Crea el acta como Google Doc usando GOG:
+
+```bash
+gog docs create "Acta {tipo} {nombre-conjunto} {YYYY-MM-DD}" --account {AGENT_EMAIL}
+```
+
+Copia el contenido del acta al documento. Luego compártelo públicamente con permiso de lectura:
+
+```bash
+gog docs share {document_id} --anyone --role reader
+```
+
+Guarda el link público.
+
+## Paso 9 — Confirmar con link al documento
+
+Envía este resumen al usuario — **no pegues el texto del acta en el chat**:
 
 ```
-Acta generada correctamente.
-- Conjunto: [nombre]
-- Tipo de reunión: [tipo]
-- Fecha: [fecha]
-- Guardada en: [ruta completa del archivo]
-- Campos marcados como [PENDIENTE]: [número o "ninguno"]
-- Tokens estimados: ~[N]
-- Costo estimado: USD [X.XX]
+Acta lista.
+
+📄 [Acta {tipo} — {fecha}]({link al Google Doc})
+
+Campos pendientes de verificar: [número o "ninguno"]
 ```
 
 ## Restricciones del skill
