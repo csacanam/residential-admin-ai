@@ -178,6 +178,45 @@ El administrador interactúa con el agente a través de Telegram. El bot se crea
 
 ---
 
+## Paso 6 — Configurar OpenClaw para estabilidad
+
+Después del onboarding, edita el archivo de configuración de OpenClaw:
+
+```bash
+nano ~/.openclaw/openclaw.json
+```
+
+Agrega o fusiona estas secciones con lo que ya exista:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "1h"
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "streaming": "progress"
+    }
+  }
+}
+```
+
+- **`compaction.mode: "safeguard"`** — compacta el historial automáticamente antes de que el contexto explote. Sin esto, el agente puede quedarse en silencio sin avisar en tareas largas.
+- **`contextPruning`** — elimina resultados de herramientas con más de 1 hora de antigüedad para liberar espacio en el contexto.
+- **`streaming: "progress"`** — el agente actualiza el mensaje en Telegram mientras trabaja, en vez de aparecer silencioso durante tareas largas.
+
+> **Si el agente alguna vez se queda sin responder:** dile `/compact` en Telegram para resumir el historial y liberar contexto.
+
+---
+
 ## Resumen de tarjetas y pagos
 
 | Servicio | Quién paga | Tipo de cobro |
@@ -202,5 +241,6 @@ El administrador interactúa con el agente a través de Telegram. El bot se crea
 - [ ] GOG CLI instalado y autenticado con el Gmail del agente
 - [ ] `AGENT_EMAIL` en `.env`
 - [ ] `/configurar-conjunto` ejecutado para cada conjunto del administrador
+- [ ] `openclaw.json` configurado con `safeguard`, `contextPruning` y `streaming: "progress"`
 - [ ] Prueba de acta con transcripción de ejemplo completada
 - [ ] Prueba de cartera con CSV de ejemplo completada (sin envío real)
